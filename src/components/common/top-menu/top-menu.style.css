@@ -253,7 +253,7 @@
    BOTÃO MOBILE
 =========================== */
 .navbar-mobile-toggle {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: var(--navbar-icon-btn-size);
@@ -275,7 +275,7 @@
    SIDEBAR MOBILE
 =========================== */
 .mobile-sidebar {
-    width: 300px !important;
+    width: 450px !important;
 }
 
 .mobile-sidebar-content {
@@ -431,7 +431,7 @@
     }
 
     .mobile-sidebar {
-        width: 280px !important;
+        width: 100% !important;
     }
 
     /* Ocultam elementos desktop em mobile */
@@ -446,8 +446,8 @@
     }
 }
 
-/* Tablet (480px a 767px) */
-@media (min-width: 480px) and (max-width: 767px) {
+/* Tablet (480px a 940px) */
+@media (min-width: 480px) and (max-width: 940px) {
     .navbar-container {
         padding: 0 var(--navbar-padding-mobile);
         gap: 1rem;
@@ -466,10 +466,6 @@
 
     .logo-image {
         height: 40px;
-    }
-
-    .mobile-sidebar {
-        width: 300px !important;
     }
 }
 

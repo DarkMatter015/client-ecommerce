@@ -6,7 +6,7 @@
 }
 
 /* Oculta em mobile por padrão */
-@media (max-width: 767px) {
+@media (max-width: 940px) {
     .navbar-actions-desktop {
         display: none !important;
     }

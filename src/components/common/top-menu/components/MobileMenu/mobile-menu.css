@@ -149,7 +149,7 @@
 }
 
 /* Responsive */
-@media (min-width: 768px) {
+@media (min-width: 940px) {
     .mobile-sidebar {
         display: none !important;
     }
