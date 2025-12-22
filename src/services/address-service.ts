@@ -12,7 +12,7 @@ const mapApiToAddress = (item: ApiAddress): IAddress => {
     id: item.id ?? item.ID ?? 0,
     street: item.street ?? "",
     number: item.number ?? "",
-    complement: item.complement ?? "",
+    complement: item.complement ?? undefined,
     neighborhood: item.neighborhood ?? "",
     city: item.city ?? "",
     state: item.state ?? "",

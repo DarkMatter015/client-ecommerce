@@ -62,7 +62,7 @@ export interface IPayment {
 export interface IAddress {
   id?: number;
   street?: string;
-  number?: number | undefined;
+  number?: string | undefined;
   complement?: string;
   neighborhood?: string;
   city?: string;
@@ -85,6 +85,20 @@ export interface IItem {
   product: IProduct;
   totalPrice?: number;
   quantity: number;
+}
+
+export class Item implements IItem {
+  id?: number;
+  product: IProduct;
+  quantity: number;
+  totalPrice?: number;
+
+  constructor(product: IProduct, quantity: number, id?: number) {
+    this.product = product;
+    this.quantity = quantity;
+    this.id = id;
+    this.totalPrice = product.price * quantity;
+  }
 }
 
 export interface IOrderRequest {

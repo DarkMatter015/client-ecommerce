@@ -6,7 +6,7 @@
   display: grid;
   grid-template-columns: var(--cart-image-size) 1fr auto;
   gap: 1.5rem;
-  align-items: center;
+  align-items: start;
   transition: var(--cart-transition);
 }
 
@@ -139,6 +139,16 @@
 
 .quantity-input:focus {
   outline: 2px solid var(--primary-color, #007bff);
+}
+
+.quantity-input::-webkit-inner-spin-button { 
+    -webkit-appearance: none;
+    
+}
+.quantity-input { 
+   -moz-appearance: textfield;
+   appearance: textfield;
+
 }
 
 /* Remove Button */

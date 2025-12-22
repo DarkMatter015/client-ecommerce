@@ -16,7 +16,7 @@ const CheckoutPage: React.FC = () => {
     const { cartItems, freight } = useCart();
 
     const [payments, setPayments] = useState<IPayment[]>([]);
-    const [paymentMethod, setPaymentMethod] = useState<null>(null);
+    const [paymentMethod, setPaymentMethod] = useState<IPayment | null>(null);
 
     const [addresses, setAddresses] = useState<IAddress[]>([]);
     const [selectedAddress, setSelectedAddress] = useState<IAddress | null>(
@@ -26,8 +26,8 @@ const CheckoutPage: React.FC = () => {
     const [showAddressDialog, setShowAddressDialog] = useState(false);
     const [newAddress, setNewAddress] = useState<Partial<IAddress>>({
         street: "",
-        number: undefined,
-        complement: "",
+        number: "",
+        complement: undefined,
         neighborhood: "",
         city: "",
         state: "",
@@ -168,8 +168,8 @@ const CheckoutPage: React.FC = () => {
                 setShowAddressDialog(false);
                 setNewAddress({
                     street: "",
-                    number: undefined,
-                    complement: "",
+                    number: "",
+                    complement: undefined,
                     neighborhood: "",
                     city: "",
                     state: "",

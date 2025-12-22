@@ -15,6 +15,36 @@
   box-sizing: border-box;
 }
 
+.card-header {
+  position: relative;
+  width: 100%;
+}
+
+.stock-badge {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+  padding: 5px 10px;
+  border-radius: 5px 5px 0 0;
+  font-weight: bold;
+  font-size: 0.9rem;
+  width: 100%;
+  height: 15%;
+}
+
+.stock-badge-warning {
+  color: rgb(116, 86, 24);
+  background-color: rgba(255, 166, 0, 0.300);
+}
+
+.stock-badge-danger {
+  color: rgb(110, 22, 22);
+  background-color: rgba(255, 0, 0, 0.300);
+}
+
 .card-image {
   width: 100%;
   min-height: 180px;
@@ -24,7 +54,10 @@
   justify-content: center;
   margin-bottom: 10px;
   overflow: hidden;
+  position: relative;
 }
+
+/* Removed old badge style since we renamed the class */
 
 .card-image img {
   max-height: 200px;
