@@ -4,6 +4,8 @@ import { InputNumber } from "primereact/inputnumber";
 import type React from "react";
 
 import "./product-info.style.css";
+import { Tag } from "primereact/tag";
+import { useProduct } from "@/hooks/useProduct";
 
 export const ProductInfo: React.FC<{
     product: IProduct,
@@ -16,10 +18,31 @@ export const ProductInfo: React.FC<{
     quantity,
     setQuantity
 }) => {
+    const { validateStock } = useProduct();
+    const stock = validateStock(product.quantityAvailableInStock);
+    const productStock = product.quantityAvailableInStock;
+
+    const getSeverity = () => {
+        if (stock == "Esgotado") {
+            return "danger";
+        } else if (stock == "Últimas Unidades") {
+            return "warning";
+        }
+    };
+
+    const getValueTag = () => {
+        if (stock) {
+            return stock + ": " + productStock;
+        } else {
+            return "Disponível: " + productStock;
+        }
+    };
+
         return (
             <>
                 <div className="product-info">
                     <h1 className="product-title">{product.name}</h1>
+                    <Tag value={getValueTag()} severity={getSeverity()}></Tag>
                     <p className="mb-0"><i>{product.name} - {product.category.name}</i></p>
                     <div className="mb-2 product-rating">
                         <span className="rating" aria-hidden>★★★★★</span>
@@ -34,6 +57,7 @@ export const ProductInfo: React.FC<{
                     </div>
                 </div>
 
+                {stock == "Esgotado" ? null : (
                 <div className="mb-3 container-input">
                     <label htmlFor="quantity" className="form-label"><strong>Quantidade</strong></label>
                     <InputNumber
@@ -43,9 +67,11 @@ export const ProductInfo: React.FC<{
                         showButtons
                         inputClassName="w-6rem"
                         min={1}
+                        max={productStock}
                         aria-label="Quantidade"
                     />
                 </div>
+                )}
             </>
         );
     };

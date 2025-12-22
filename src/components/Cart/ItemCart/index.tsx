@@ -54,7 +54,7 @@ export const ItemCart: React.FC<{
                     >
                         <button
                             className="quantity-btn"
-                            onClick={() => handleUpdateQuantity(item.id!, item.quantity - 1)}
+                            onClick={() => handleUpdateQuantity(item.product.id!, item.quantity - 1)}
                             disabled={item.quantity <= 1}
                             aria-label="Diminuir quantidade"
                         >
@@ -63,11 +63,12 @@ export const ItemCart: React.FC<{
                         <input
                             type="number"
                             className="quantity-input"
+                            
                             value={item.quantity}
                             min={1}
                             onChange={(e) =>
                                 handleUpdateQuantity(
-                                    item.id!,
+                                    item.product.id!,
                                     Math.max(1, Number(e.target.value) || 1)
                                 )
                             }
@@ -75,7 +76,8 @@ export const ItemCart: React.FC<{
                         />
                         <button
                             className="quantity-btn"
-                            onClick={() => handleUpdateQuantity(item.id!, item.quantity + 1)}
+                            disabled={item.quantity == item.product.quantityAvailableInStock}
+                            onClick={() => handleUpdateQuantity(item.product.id!, item.quantity + 1)}
                             aria-label="Aumentar quantidade"
                         >
                             <i className="pi pi-plus" aria-hidden="true"></i>

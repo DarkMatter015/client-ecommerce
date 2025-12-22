@@ -4,7 +4,6 @@ import { validateCep } from "@/services/cep-service";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputMask } from "primereact/inputmask";
-import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import type React from "react";
 import { useState } from "react";
@@ -64,11 +63,11 @@ export const RegisterAddressDialog: React.FC<{
 
     // Validação de Número
     const validateNumberField = (
-        number: number | undefined
+        number: string | undefined
     ): string | undefined => {
-        if (number === undefined || number === null)
+        if (number === undefined || number === null || number.trim() === "")
             return "Número é obrigatório";
-        if (number <= 0) return "Número deve ser maior que zero";
+        if (number == "0") return "Número deve ser maior que zero";
         return undefined;
     };
 
@@ -213,10 +212,10 @@ export const RegisterAddressDialog: React.FC<{
         }
     };
 
-    const handleChangeNumber = (value: number | null) => {
+    const handleChangeNumber = (value: string | null) => {
         setNewAddress({
             ...newAddress,
-            number: value ? Number(value) : undefined,
+            number: value ? String(value) : undefined,
         });
         // Limpar erro ao usuário começar a editar
         if (errors.number) {
@@ -388,13 +387,12 @@ export const RegisterAddressDialog: React.FC<{
                                 gap: "0.5rem",
                             }}
                         >
-                            <InputNumber
+                            <InputText
                                 id="number"
                                 value={newAddress.number || null}
-                                onChange={(e) => handleChangeNumber(e.value)}
+                                onChange={(e) => handleChangeNumber(e.target.value)}
                                 onBlur={handleBlurNumber}
                                 placeholder="Número"
-                                useGrouping={false}
                                 style={{
                                     ...numberStatus,
                                     width: "100%",
@@ -438,7 +436,7 @@ export const RegisterAddressDialog: React.FC<{
                         >
                             <InputText
                                 id="complement"
-                                value={newAddress.complement || ""}
+                                value={newAddress.complement || null}
                                 onChange={(e) =>
                                     handleChangeComplement(e.target.value)
                                 }
