@@ -33,12 +33,11 @@ export const CalcFreight: React.FC<{
                         aria-label="CEP"
                     />
                     <Button
-                        className="p-button-text"
                         onClick={handleCalculateFreight}
                         aria-label="Calcular frete e prazo"
-                    >
-                        Calcular
-                    </Button>
+                        severity="help"
+                        label="Calcular"
+                    />
                 </div>
                 <a href="#" className="small">
                     Não sei meu CEP
