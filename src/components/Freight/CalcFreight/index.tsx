@@ -12,7 +12,7 @@ export const CalcFreight: React.FC<{
     setCep: (cep: string) => void;
     produtos: IItem[];
 }> = ({ cep, setCep, produtos }) => {
-    const { handleCalculateFreight, freightsData } = useFreight(cep, produtos);
+    const { handleCalculateFreight, freightsData, loading } = useFreight(cep, produtos);
 
     return (
         <>
@@ -34,9 +34,11 @@ export const CalcFreight: React.FC<{
                     />
                     <Button
                         onClick={handleCalculateFreight}
+                        disabled={loading}
                         aria-label="Calcular frete e prazo"
                         severity="help"
-                        label="Calcular"
+                        label={loading ? "Carregando..." : "Calcular"}
+                        icon={loading ? "pi pi-spin pi-spinner" : null}
                     />
                 </div>
                 <a href="#" className="small">

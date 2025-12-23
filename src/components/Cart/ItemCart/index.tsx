@@ -24,7 +24,7 @@ export const ItemCart: React.FC<{
                     onClick={() => handleProductClick(item.product.id)}
                     aria-label={`Ver detalhes de ${item.product.name}`}
                 >
-                    <img src={item.product.urlImage} alt={item.product.name} />
+                    <img src={item.product.urlImage || "/assets/images/common/unavailable_image_product.png"} alt={item.product.name} />
                 </button>
 
                 <div className="cart-item-details">

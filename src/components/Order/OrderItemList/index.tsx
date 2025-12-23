@@ -10,10 +10,10 @@ export const OrderItemList: React.FC<{ item: IItem, index: number }> = ({item}) 
         <div className="order-item-detail">
             <div className="order-item-image">
                 <img
-                    src={item.product.urlImage}
+                    src={item.product.urlImage || "/assets/images/common/unavailable_image_product.png"}
                     alt={item.product.name}
                     onError={(e) => {
-                        e.currentTarget.src = '/placeholder-product.png';
+                        e.currentTarget.src = '/assets/images/common/unavailable_image_product.png';
                     }}
                 />
             </div>

@@ -10,6 +10,7 @@ export function useFreight(cep: string, produtos: IItem[]) {
     const [freightsData, setFreightsData] = useState<
         IFreightResponse[] | undefined
     >(undefined);
+    const [loading, setLoading] = useState(false);
 
     const [selectedFreight, setSelectedFreight] =
         useState<IFreightResponse | null>(null);
@@ -29,6 +30,7 @@ export function useFreight(cep: string, produtos: IItem[]) {
             };
 
             try {
+                setLoading(true);
                 const response = await calculateFreightByProducts(freight);
 
                 if (response.success) {
@@ -47,13 +49,14 @@ export function useFreight(cep: string, produtos: IItem[]) {
                             : undefined
                     );
                 } else {
-                    if (response.status === 422)
+                    if (response.status === 422 || response.status === 400)
                         showToast(
                             "error",
                             "Erro ao calcular frete",
                             "CEP Inválido!",
                             2000
                         );
+                        setFreightsData(undefined);
                 }
             } catch (error: any) {
                 showToast(
@@ -62,6 +65,7 @@ export function useFreight(cep: string, produtos: IItem[]) {
                     error.message,
                     2000
                 );
+                setFreightsData(undefined);
             }
         } else {
             showToast(
@@ -70,7 +74,9 @@ export function useFreight(cep: string, produtos: IItem[]) {
                 "Por favor, insira um CEP válido de 8 caracteres.",
                 2000
             );
+            setFreightsData(undefined);
         }
+        setLoading(false);
     }, [cep, produtos, showToast]);
 
     return {
@@ -78,5 +84,6 @@ export function useFreight(cep: string, produtos: IItem[]) {
         selectedFreight,
         setSelectedFreight,
         handleCalculateFreight,
+        loading,
     };
 }

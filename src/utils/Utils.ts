@@ -19,7 +19,7 @@ export const scrollIntoView = (id: string): void => {
 export const normalizePage = (
   data: any,
   page = 0,
-  size = 10,
+  size = 8,
   mapApiTo: (item: any) => any
 ): IPage<any> => {
   // If API returned an array
