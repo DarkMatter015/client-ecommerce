@@ -15,7 +15,7 @@ export const CheckoutOrderItems: React.FC<{ cartItems: IItem[] | undefined }> = 
             </h3>
             <div className="order-item-list">
                 {cartItems?.map((item) => (
-                    <ItemCartCheckout key={item.id} item={item} />
+                    <ItemCartCheckout key={item.product.id} item={item} />
                 ))}
             </div>
         </section>
