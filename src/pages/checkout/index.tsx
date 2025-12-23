@@ -24,25 +24,25 @@ import { OrderConfirmation } from "@/components/Checkout/OrderConfirmation";
 const CheckoutPage: React.FC = () => {
 	const { cartItems, freight } = useCart();
 
-	const [payments, setPayments] = useState<IPayment[]>([]);
-	const [paymentMethod, setPaymentMethod] = useState<null>(null);
+    const [payments, setPayments] = useState<IPayment[]>([]);
+    const [paymentMethod, setPaymentMethod] = useState<IPayment | null>(null);
 
 	const [addresses, setAddresses] = useState<IAddress[]>([]);
 	const [selectedAddress, setSelectedAddress] = useState<IAddress | null>(
 		null
 	);
 
-	const [showAddressDialog, setShowAddressDialog] = useState(false);
-	const [newAddress, setNewAddress] = useState<Partial<IAddress>>({
-		street: "",
-		number: undefined,
-		complement: "",
-		neighborhood: "",
-		city: "",
-		state: "",
-		cep: "",
-	});
-	const [savingAddress, setSavingAddress] = useState(false);
+    const [showAddressDialog, setShowAddressDialog] = useState(false);
+    const [newAddress, setNewAddress] = useState<Partial<IAddress>>({
+        street: "",
+        number: "",
+        complement: undefined,
+        neighborhood: "",
+        city: "",
+        state: "",
+        cep: "",
+    });
+    const [savingAddress, setSavingAddress] = useState(false);
 
 	const navigate = useNavigate();
 	const { showToast } = useToast();
@@ -167,40 +167,40 @@ const CheckoutPage: React.FC = () => {
 			return;
 		}
 
-		try {
-			setSavingAddress(true);
-			const response = await createAddress(newAddress as IAddress);
-			if (response) {
-				setAddresses([...addresses, response]);
-				setSelectedAddress(response);
-				setShowAddressDialog(false);
-				setNewAddress({
-					street: "",
-					number: undefined,
-					complement: "",
-					neighborhood: "",
-					city: "",
-					state: "",
-					cep: "",
-				});
-				showToast(
-					"success",
-					"Endereço Adicionado",
-					"Endereço adicionado com sucesso!"
-				);
-			}
-		} catch (error) {
-			console.error("Erro ao adicionar endereço:", error);
-			showToast(
-				"error",
-				"Erro",
-				"Erro ao adicionar o endereço. Tente novamente.",
-				3000
-			);
-		} finally {
-			setSavingAddress(false);
-		}
-	};
+        try {
+            setSavingAddress(true);
+            const response = await createAddress(newAddress as IAddress);
+            if (response) {
+                setAddresses([...addresses, response]);
+                setSelectedAddress(response);
+                setShowAddressDialog(false);
+                setNewAddress({
+                    street: "",
+                    number: "",
+                    complement: undefined,
+                    neighborhood: "",
+                    city: "",
+                    state: "",
+                    cep: "",
+                });
+                showToast(
+                    "success",
+                    "Endereço Adicionado",
+                    "Endereço adicionado com sucesso!"
+                );
+            }
+        } catch (error) {
+            console.error("Erro ao adicionar endereço:", error);
+            showToast(
+                "error",
+                "Erro",
+                "Erro ao adicionar o endereço. Tente novamente.",
+                3000
+            );
+        } finally {
+            setSavingAddress(false);
+        }
+    };
 
 	const handleAddressDialogHide = () => {
 		setShowAddressDialog(false);

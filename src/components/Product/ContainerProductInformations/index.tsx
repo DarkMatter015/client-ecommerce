@@ -26,7 +26,7 @@ export const ContainerProductInformations: React.FC<{
                 produtos={[{ product: produto, quantity: quantity }]}
             />
 
-            <ProductActions produto={produto} quantity={quantity} />
+            <ProductActions product={produto} quantity={quantity} />
         </div>
     );
 };

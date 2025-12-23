@@ -382,8 +382,9 @@
   }
 
   .cart-item {
-    grid-template-columns: var(--cart-image-size-tablet) 1fr;
-    gap: 1rem;
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    gap: 1rem !important;
   }
 
   .cart-item-image {
@@ -393,9 +394,9 @@
 
   .cart-item-actions {
     grid-column: 1 / -1;
-    flex-direction: row;
+    /* flex-direction: row !important; */
     justify-content: space-between;
-    align-items: center;
+    align-items: center !important;
     width: 100%;
   }
 
