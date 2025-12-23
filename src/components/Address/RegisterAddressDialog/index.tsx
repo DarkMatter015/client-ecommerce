@@ -4,7 +4,6 @@ import { validateCep } from "@/services/cep-service";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputMask } from "primereact/inputmask";
-import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import type React from "react";
 import { useState } from "react";
