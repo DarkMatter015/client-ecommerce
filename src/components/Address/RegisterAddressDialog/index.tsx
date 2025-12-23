@@ -438,7 +438,7 @@ export const RegisterAddressDialog: React.FC<{
                         >
                             <InputText
                                 id="complement"
-                                value={newAddress.complement || ""}
+                                value={newAddress.complement || undefined}
                                 onChange={(e) =>
                                     handleChangeComplement(e.target.value)
                                 }

@@ -63,7 +63,7 @@ export interface IAddress {
   id?: number;
   street?: string;
   number?: number | undefined;
-  complement?: string;
+  complement?: string | undefined;
   neighborhood?: string;
   city?: string;
   state?: string;

@@ -36,7 +36,7 @@ const CheckoutPage: React.FC = () => {
 	const [newAddress, setNewAddress] = useState<Partial<IAddress>>({
 		street: "",
 		number: undefined,
-		complement: "",
+		complement: undefined,
 		neighborhood: "",
 		city: "",
 		state: "",
@@ -177,7 +177,7 @@ const CheckoutPage: React.FC = () => {
 				setNewAddress({
 					street: "",
 					number: undefined,
-					complement: "",
+					complement: undefined,
 					neighborhood: "",
 					city: "",
 					state: "",
@@ -207,7 +207,7 @@ const CheckoutPage: React.FC = () => {
 		setNewAddress({
 			street: "",
 			number: undefined,
-			complement: "",
+			complement: undefined,
 			neighborhood: "",
 			city: "",
 			state: "",
