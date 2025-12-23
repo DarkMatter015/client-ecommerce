@@ -7,7 +7,7 @@ export const CheckoutPaymentMethod: React.FC<{
     setPaymentMethod: any
 }> = ({payments, paymentMethod, setPaymentMethod}) => {
     return (
-        <section className="payment-card">
+        <section className="payment-card mb-5">
             <h4>
             <i className="pi pi-credit-card" aria-hidden="true"></i> Pagamento
             </h4>

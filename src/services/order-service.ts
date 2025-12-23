@@ -70,5 +70,6 @@ export const postOrder = async (
     return response;
   } catch (err) {
     console.error(`Erro ao realizar pedido na rota ${route}`, err);
+    throw err;
   }
 };
