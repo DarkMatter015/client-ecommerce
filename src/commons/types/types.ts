@@ -44,6 +44,18 @@ export interface IUser {
   password?: string | null;
 }
 
+export interface IUserUpdate {
+  id?: number;
+  displayName?: string | null;
+  email?: string | null;
+}
+
+export interface IChangePassword {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 export interface IAuthenticationResponse {
   token: string;
   user: IAuthenticatedUser;
