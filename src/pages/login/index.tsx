@@ -8,6 +8,7 @@ import { Button } from "primereact/button";
 
 import { useAuth } from "@/context/hooks/use-auth";
 import AuthService from "@/services/auth-service";
+import { VALIDATION_RULES, createValidationRules } from "@/utils/FormUtils";
 
 import "@/styles/form.css";
 import type {
@@ -22,23 +23,6 @@ const FORM_DEFAULT_VALUES: IUserLogin = {
     password: "",
 };
 
-const VALIDATION_RULES = {
-    email: {
-        required: "Email é obrigatório",
-        pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: "Email inválido",
-        },
-    },
-    password: {
-        required: "Senha é obrigatória",
-        minLength: {
-            value: 6,
-            message: "A senha deve ter no mínimo 6 caracteres",
-        },
-    },
-} as const;
-
 const NAVIGATION_DELAY = 1000;
 
 export const LoginPage = () => {
@@ -48,7 +32,7 @@ export const LoginPage = () => {
         formState: { isSubmitting },
     } = useForm<IUserLogin>({
         defaultValues: FORM_DEFAULT_VALUES,
-        mode: "onBlur",
+        mode: "all",
     });
 
     const navigate = useNavigate();
@@ -157,7 +141,7 @@ export const LoginPage = () => {
                         <Controller
                             name="password"
                             control={control}
-                            rules={VALIDATION_RULES.password}
+                            rules={createValidationRules({ label: "Senha", required: true, minLength: 6 })}
                             render={({ field, fieldState }) => (
                                 <>
                                     <Password

@@ -3,6 +3,7 @@ import type {
   IUserLogin,
   IUserRegister,
   IUser,
+  IChangePassword,
 } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 
@@ -119,10 +120,32 @@ const updateProfile = async (user: IUser): Promise<IResponse> => {
   return response;
 };
 
+const changePassword = async (changePassword: IChangePassword ): Promise<IResponse> => {
+  let response = {} as IResponse;
+  try {
+    const data = await api.post(`${route}/change-password`, changePassword);
+    response = {
+      status: data.status,
+      success: true,
+      message: "Senha alterada com sucesso",
+      data: data.data,
+    };
+  } catch (err: any) {
+    response = {
+      status: err.response?.status ?? 500,
+      success: false,
+      message: err.response?.data.message || "Erro ao alterar a senha",
+      data: err.response?.data,
+    };
+  }
+  return response;
+};
+
 const AuthService = {
   signup,
   login,
   validateToken,
   updateProfile,
+  changePassword
 };
 export default AuthService;

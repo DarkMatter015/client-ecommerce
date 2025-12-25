@@ -1,8 +1,10 @@
 import type { IOrderResponse } from "@/commons/types/types";
 import { OrdersList } from "@/components/Order/OrdersList";
+import { OrdersNotFound } from "@/components/Order/OrdersNotFound";
 import { getAllOrdersPageable } from "@/services/order-service";
 import type React from "react";
 import { useEffect, useState } from "react";
+import "./orders-page.style.css";
 
 const OrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<IOrderResponse[]>([]);
@@ -62,7 +64,7 @@ const OrdersPage: React.FC = () => {
           />
       </>
       ) : (
-        <div className="orders-page">Nenhum pedido encontrado.</div>
+        <OrdersNotFound />
       )}
 
       
