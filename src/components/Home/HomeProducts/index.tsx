@@ -42,7 +42,7 @@ export const HomeProducts: React.FC = () => {
 
     useEffect(() => {
         
-    fetchProducts(0, 10);
+    fetchProducts(0, rows);
     }, [rows, category, fetchProducts]);
 
     const handlePageChange = (e: any) => {

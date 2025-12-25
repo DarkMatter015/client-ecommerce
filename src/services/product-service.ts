@@ -12,7 +12,7 @@ const mapApiToProduct = (item: ApiProduct): IProduct => {
     name: item.name ?? "",
     description: item.description ?? "",
     price: Number(item.price ?? 0),
-    urlImage: item.urlImage ?? "",
+    urlImage: item.urlImage ?? "/assets/images/common/unavailable_image_product.png",
     category: item.category ?? { id: 0, name: "" },
     quantityAvailableInStock: Number(item.quantityAvailableInStock ?? 0),
   };

@@ -62,7 +62,7 @@ export const EmailForm: React.FC<{
 
 			<div className="flex align-items-center gap-3 p-3 surface-ground border-round-lg shadow-1 w-full">
 				<img
-					src={product.urlImage}
+					src={product.urlImage || "/assets/images/common/unavailable_image_product.png"}
 					alt={product.name}
 					className="w-4rem h-4rem border-round object-cover shadow-1 bg-white"
 				/>

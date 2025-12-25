@@ -29,7 +29,7 @@ export const CardProduct: React.FC<{
 					data-id={product.id}
 				>
 					<img
-						src={product.urlImage}
+						src={product.urlImage || "/assets/images/common/unavailable_image_product.png"}
 						className="img-fluid"
 						alt={product.name}
 					/>

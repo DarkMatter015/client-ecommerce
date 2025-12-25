@@ -10,7 +10,7 @@ export const ItemCartCheckout: React.FC<{
         return (
             <article key={item.id} className="order-item" aria-label={item.product.name}>
                 <div className="order-item-image">
-                    <img src={item.product.urlImage} alt={item.product.urlImage} />
+                    <img src={item.product.urlImage || "/assets/images/common/unavailable_image_product.png"} alt={item.product.name} />
                 </div>
                 <div className="order-item-details">
                     <h4 className="order-item-name">{item.product.name}</h4>

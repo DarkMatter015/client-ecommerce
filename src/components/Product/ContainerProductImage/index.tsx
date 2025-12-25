@@ -9,10 +9,10 @@ export const ContainerProductImage: React.FC<{
     produto: IProduct;
 }> = ({ produto }) => {
     const [zoomVisible, setZoomVisible] = useState(false);
-    const [mainImage, setMainImage] = useState<string>(produto.urlImage);
+    const [mainImage, setMainImage] = useState<string>(produto.urlImage || "/assets/images/common/unavailable_image_product.png");
 
     useEffect(() => {
-        setMainImage(produto.urlImage);
+        setMainImage(produto.urlImage || "/assets/images/common/unavailable_image_product.png");
     }, [produto.urlImage]);
 
     // thumbnails: ensure we always pass an array of image urls
