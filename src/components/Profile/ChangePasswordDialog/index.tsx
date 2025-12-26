@@ -43,30 +43,11 @@ export const ChangePasswordDialog = () => {
 				reset();
 				setVisible(false);
 			} else {
-				if (response.message == "The current password is incorrect.") {
-					showToast("error", "Erro", "Senha atual incorreta");
-					setError(
-						"currentPassword",
-						{ message: "Senha atual incorreta" },
-						{ shouldFocus: true }
-					);
-				} else if (
-					response.message ==
-					"The confirm password does not match the new password"
-				) {
-					showToast("error", "Erro", "As senhas não conferem");
-					setError(
-						"confirmPassword",
-						{ message: "As senhas não conferem" },
-						{ shouldFocus: true }
-					);
-				} else {
-					showToast(
-						"error",
-						"Erro",
-						response.message || "Erro ao alterar a senha"
-					);
-				}
+				showToast(
+					"error",
+					"Erro",
+					response.message || "Erro ao alterar a senha"
+				);
 			}
 		} catch (error) {
 			console.log(error);
@@ -128,12 +109,9 @@ export const ChangePasswordDialog = () => {
 										aria-invalid={!!fieldState.error}
 										required
 										className="w-full"
-										inputClassName={classNames(
-											"w-full",
-											{
-												"p-invalid": fieldState.error,
-											}
-										)}
+										inputClassName={classNames("w-full", {
+											"p-invalid": fieldState.error,
+										})}
 										toggleMask
 										feedback={false}
 										{...field}
@@ -169,12 +147,9 @@ export const ChangePasswordDialog = () => {
 										aria-invalid={!!fieldState.error}
 										required
 										className="w-full"
-										inputClassName={classNames(
-											"w-full",
-											{
-												"p-invalid": fieldState.error,
-											}
-										)}
+										inputClassName={classNames("w-full", {
+											"p-invalid": fieldState.error,
+										})}
 										toggleMask
 										feedback={false}
 										{...field}
@@ -215,12 +190,9 @@ export const ChangePasswordDialog = () => {
 										aria-invalid={!!fieldState.error}
 										required
 										className="w-full"
-										inputClassName={classNames(
-											"w-full ",
-											{
-												"p-invalid": fieldState.error,
-											}
-										)}
+										inputClassName={classNames("w-full ", {
+											"p-invalid": fieldState.error,
+										})}
 										toggleMask
 										feedback={false}
 										{...field}
