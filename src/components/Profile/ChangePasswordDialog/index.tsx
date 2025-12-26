@@ -25,7 +25,6 @@ export const ChangePasswordDialog = () => {
 		getValues,
 		formState: { isSubmitting, isValid },
 		reset,
-		setError,
 	} = useForm<IChangePassword>({
 		defaultValues: FORM_DEFAULT_VALUES,
 		mode: "all",
