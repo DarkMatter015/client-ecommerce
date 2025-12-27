@@ -48,6 +48,7 @@ label {
 
 .form-submit-button {
     width: 100%;
+    border: none;
     background-color: var(--primary-color-darker);
     transition: all 0.2s ease-in-out !important;
 }

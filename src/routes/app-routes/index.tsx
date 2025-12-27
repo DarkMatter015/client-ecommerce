@@ -10,12 +10,14 @@ import CheckoutPage from "@/pages/checkout";
 import OrdersPage from "@/pages/orders";
 import Profile from "@/pages/profile";
 import { NotFoundPage } from "@/pages/notFound";
+import { ForgotPasswordPage } from "@/pages/fogotPassword";
 
 export function AppRoutes() {
 	return (
 		<Routes>
 			<Route path="login" element={<LoginPage />} />
 			<Route path="cadastro" element={<RegisterPage />} />
+			<Route path="recuperar-senha" element={<ForgotPasswordPage />} />
 
 			<Route path="/" element={<Layout />}>
 				{/* public routes */}

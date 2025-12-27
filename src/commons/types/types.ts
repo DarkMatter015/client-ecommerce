@@ -26,6 +26,16 @@ export interface IUserLogin {
   password: string;
 }
 
+export interface IForgotPassword {
+  email: string;
+}
+
+export interface IResetPassword {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 // Interfaces para os dados de autenticação
 export interface IAuthorities {
   authority: string;

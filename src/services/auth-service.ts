@@ -4,6 +4,8 @@ import type {
   IUserRegister,
   IUser,
   IChangePassword,
+  IForgotPassword,
+  IResetPassword,
 } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 
@@ -141,11 +143,77 @@ const changePassword = async (changePassword: IChangePassword ): Promise<IRespon
   return response;
 };
 
+const forgotPassword = async (forgotPassword: IForgotPassword): Promise<IResponse> => {
+  let response = {} as IResponse;
+  try {
+    const data = await api.post(`${route}/forgot-password`, forgotPassword);
+    response = {
+      status: data.status,
+      success: true,
+      message: "Se o email existir, um email de redefinição de senha será enviado.",
+      data: data.data,
+    };
+  } catch (err: any) {
+    response = {
+      status: err.response?.status ?? 500,
+      success: false,
+      message: err.response?.data.message || "Erro ao enviar email. Tente novamente mais tarde.",
+      data: err.response?.data,
+    };
+  }
+  return response;
+};
+
+const validateResetToken = async (token: string): Promise<IResponse> => {
+  let response = {} as IResponse;
+  try {
+    const data = await api.get(`${route}/validate-reset-token?token=${token}`);
+    response = {
+      status: data.status,
+      success: true,
+      message: response.message || "Token válido.",
+      data: data.data,
+    };
+  } catch (err: any) {
+    response = {
+      status: err.response?.status ?? 500,
+      success: false,
+      message: err.response?.data.message || "Token inválido.",
+      data: err.response?.data,
+    };
+  }
+  return response;
+};
+
+const resetPassword = async (resetPassword: IResetPassword): Promise<IResponse> => {
+  let response = {} as IResponse;
+  try {
+    const data = await api.post(`${route}/reset-password`, resetPassword);
+    response = {
+      status: data.status,
+      success: true,
+      message: response.message || "Senha redefinida com sucesso. Faça login com sua nova senha.",
+      data: data.data,
+    };
+  } catch (err: any) {
+    response = {
+      status: err.response?.status ?? 500,
+      success: false,
+      message: err.response?.data.message || "Erro ao redefinir a senha.",
+      data: err.response?.data,
+    };
+  }
+  return response;
+};
+
 const AuthService = {
   signup,
   login,
   validateToken,
   updateProfile,
-  changePassword
+  changePassword,
+  forgotPassword,
+  validateResetToken,
+  resetPassword
 };
 export default AuthService;

@@ -1,7 +1,8 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
+import "./login.style.css";
 
 import { useAuth } from "@/context/hooks/use-auth";
 import AuthService from "@/services/auth-service";
@@ -113,10 +114,14 @@ export const LoginPage = () => {
 					})}
 					autoComplete="current-password"
 				/>
+				<div className="flex justify-content-end">
+					<Link to="/recuperar-senha" className="forgot-password">
+						Esqueci minha senha
+					</Link>
+				</div>
 
 				<Button
 					severity="info"
-					raised
 					type="submit"
 					className="w-full text-1xl form-submit-button"
 					loading={isSubmitting}
@@ -124,6 +129,8 @@ export const LoginPage = () => {
 					aria-label="Entrar na conta"
 					label="Entrar na conta"
 				/>
+
+				
 
 				<AuthFooter
 					text="Não tem uma conta?"
