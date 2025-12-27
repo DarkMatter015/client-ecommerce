@@ -2,13 +2,13 @@ import "./change-password.style.css";
 import { Button } from "primereact/button";
 import { useState } from "react";
 import { Dialog } from "primereact/dialog";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import type { IChangePassword } from "@/commons/types/types";
-import { createValidationRules } from "@/utils/FormUtils";
 import AuthService from "@/services/auth-service";
 import { useToast } from "@/context/hooks/use-toast";
-import { Password } from "primereact/password";
-import { classNames } from "primereact/utils";
+import { FormPasswordInput } from "@/components/Form/FormPasswordInput";
+import { PasswordFooter } from "@/components/Form/PasswordFooter";
+import { VALIDATION_RULES } from "@/utils/FormUtils";
 
 const FORM_DEFAULT_VALUES: IChangePassword = {
 	currentPassword: "",
@@ -25,7 +25,6 @@ export const ChangePasswordDialog = () => {
 		getValues,
 		formState: { isSubmitting, isValid },
 		reset,
-		setError,
 	} = useForm<IChangePassword>({
 		defaultValues: FORM_DEFAULT_VALUES,
 		mode: "all",
@@ -43,37 +42,18 @@ export const ChangePasswordDialog = () => {
 				reset();
 				setVisible(false);
 			} else {
-				if (response.message == "The current password is incorrect.") {
-					showToast("error", "Erro", "Senha atual incorreta");
-					setError(
-						"currentPassword",
-						{ message: "Senha atual incorreta" },
-						{ shouldFocus: true }
-					);
-				} else if (
-					response.message ==
-					"The confirm password does not match the new password"
-				) {
-					showToast("error", "Erro", "As senhas não conferem");
-					setError(
-						"confirmPassword",
-						{ message: "As senhas não conferem" },
-						{ shouldFocus: true }
-					);
-				} else {
-					showToast(
-						"error",
-						"Erro",
-						response.message || "Erro ao alterar a senha"
-					);
-				}
+				showToast(
+					"error",
+					"Erro",
+					response.message || "Erro ao alterar a senha"
+				);
 			}
-		} catch (error) {
+		} catch (error: any) {
 			console.log(error);
 			showToast(
 				"error",
 				"Erro",
-				"Erro ao alterar a senha. Tente novamente."
+				error.message || "Erro ao alterar a senha. Tente novamente."
 			);
 		}
 	};
@@ -110,133 +90,53 @@ export const ChangePasswordDialog = () => {
 					className="flex flex-column gap-3"
 					noValidate
 				>
-					<div className="input-group">
-						<label htmlFor="currentPassword">Senha Atual</label>
-						<Controller
-							name="currentPassword"
-							control={control}
-							rules={createValidationRules({
-								label: "Senha Atual",
-								required: true,
-								minLength: 6,
-							})}
-							render={({ field, fieldState }) => (
-								<>
-									<Password
-										inputId="currentPassword"
-										aria-describedby="currentPassword"
-										aria-invalid={!!fieldState.error}
-										required
-										className="w-full"
-										inputClassName={classNames(
-											"w-full",
-											{
-												"p-invalid": fieldState.error,
-											}
-										)}
-										toggleMask
-										feedback={false}
-										{...field}
-									/>
-									{fieldState.error && (
-										<small
-											id="currentPassword-error"
-											className="p-error block mt-1"
-										>
-											{fieldState.error.message}
-										</small>
-									)}
-								</>
-							)}
-						/>
-					</div>
-					<div className="input-group">
-						<label htmlFor="newPassword">Nova Senha</label>
-						<Controller
-							name="newPassword"
-							control={control}
-							rules={createValidationRules({
-								label: "Nova Senha",
-								required: true,
-								type: "password",
-							})}
-							render={({ field, fieldState }) => (
-								<>
-									<Password
-										id="newPassword"
-										type="password"
-										aria-describedby="newPassword"
-										aria-invalid={!!fieldState.error}
-										required
-										className="w-full"
-										inputClassName={classNames(
-											"w-full",
-											{
-												"p-invalid": fieldState.error,
-											}
-										)}
-										toggleMask
-										feedback={false}
-										{...field}
-									/>
-									{fieldState.error && (
-										<small
-											id="newPassword-error"
-											className="p-error block mt-1"
-										>
-											{fieldState.error.message}
-										</small>
-									)}
-								</>
-							)}
-						/>
-					</div>
-					<div className="input-group">
-						<label htmlFor="confirmPassword">Confirmar Senha</label>
-						<Controller
-							name="confirmPassword"
-							control={control}
-							rules={createValidationRules({
-								label: "Confirmar Senha",
-								required: true,
-								custom: (value) => {
-									if (value !== getValues("newPassword")) {
-										return "As senhas não conferem";
-									}
-									return true;
-								},
-							})}
-							render={({ field, fieldState }) => (
-								<>
-									<Password
-										id="confirmPassword"
-										type="password"
-										aria-describedby="confirmPassword"
-										aria-invalid={!!fieldState.error}
-										required
-										className="w-full"
-										inputClassName={classNames(
-											"w-full ",
-											{
-												"p-invalid": fieldState.error,
-											}
-										)}
-										toggleMask
-										feedback={false}
-										{...field}
-									/>
-									{fieldState.error && (
-										<small
-											id="confirmPassword-error"
-											className="p-error block mt-1"
-										>
-											{fieldState.error.message}
-										</small>
-									)}
-								</>
-							)}
-						/>
-					</div>
+					<FormPasswordInput
+						control={control}
+						name="currentPassword"
+						label="Senha Atual"
+						placeholder="Digite sua senha atual"
+						feedback={false}
+						rules={{
+							required: "Senha Atual é obrigatória",
+							minLength: {
+								value: 6,
+								message:
+									"A senha deve ter no mínimo 6 caracteres",
+							},
+						}}
+					/>
+					<FormPasswordInput
+						control={control}
+						name="newPassword"
+						label="Nova Senha"
+						feedback={true}
+						placeholder="Digite uma senha forte"
+						rules={{
+							required: "Nova Senha é obrigatória",
+							validate: VALIDATION_RULES.password.validate
+						}}
+						autoComplete="newPassword"
+						footer={
+							<PasswordFooter
+								control={control}
+								name="newPassword"
+							/>
+						}
+					/>
+					<FormPasswordInput
+						control={control}
+						name="confirmPassword"
+						label="Confirmar Senha"
+						placeholder="Digite a senha novamente"
+						rules={{
+							required: "Confirme sua senha",
+							validate: (value) =>
+								value === getValues("newPassword") ||
+								"As senhas não conferem",
+						}}
+						autoComplete="new-password"
+					/>
+
 					<div className="w-100 mt-3 flex gap-2 justify-content-end">
 						<Button
 							outlined

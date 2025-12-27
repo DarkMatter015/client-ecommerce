@@ -49,6 +49,37 @@ body {
     gap: 0.2rem;
 }
 
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.p-invalid input, .i-invalid{
+    border: solid 1px red !important;
+}
+
+.p-invalid input:focus, .i-invalid:focus{
+    box-shadow: #ffb3ba 0 0 0.5rem !important;
+}
+
+.p-valid input, .i-valid{
+    border: solid 1px green !important;
+}
+
+.p-valid input:focus, .i-valid:focus{
+    box-shadow: #b3ffb9 0 0 0.5rem !important;
+}
+
+.p-icon-field.p-icon-field-right {
+    width: 100%;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);

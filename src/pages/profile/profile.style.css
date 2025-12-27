@@ -32,58 +32,6 @@
   padding: 0;
 }
 
-.info-section {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #f0f0f0;
-  transition: background-color 0.3s ease;
-}
-
-.info-section:last-child {
-  border-bottom: none;
-}
-
-.info-section:hover {
-  background-color: #f8f9fa;
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex: 1;
-}
-
-.info-item i {
-  font-size: 2rem;
-  color: #667eea;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(102, 126, 234, 0.1);
-  border-radius: 10px;
-}
-
-.info-item h4 {
-  margin: 0 0 0.25rem 0;
-  color: #333;
-  font-weight: 600;
-}
-
-.info-item p {
-  margin: 0;
-  color: #999;
-  font-size: 0.9rem;
-}
-
-.info-section :global(.p-button) {
-  color: #667eea;
-}
-
 @media (max-width: 850px) {
   .profile-container {
     flex-direction: column;
@@ -128,10 +76,6 @@
 
   .edit-actions {
     flex-direction: column;
-  }
-
-  .info-section {
-    padding: 1.25rem 1rem;
   }
 
   .info-card :global(.p-card-body) {

@@ -306,36 +306,6 @@
   padding: 1.5rem;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #333;
-}
-
-.form-group .p-inputtext {
-  width: 100%;
-}
-
-.form-group small.p-error {
-  color: var(--cart-danger-color);
-  font-size: 0.85rem;
-  margin-top: 0.25rem;
-}
-
-.form-group .p-inputtext.p-invalid {
-  border-color: var(--cart-danger-color);
-}
-
-.form-group .p-inputtext.p-invalid:focus {
-  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
-}
-
 .form-row {
   display: grid;
   grid-template-columns: 1fr 2fr;

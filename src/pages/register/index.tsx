@@ -1,21 +1,21 @@
 import { useCallback } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { classNames } from "primereact/utils";
-import { InputText } from "primereact/inputtext";
-import { Password } from "primereact/password";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 
 import type { IUserRegister } from "@/commons/types/types";
 import AuthService from "@/services/auth-service";
 
 import "@/styles/form.css";
-import "./register.style.css";
-import { InputMask } from "primereact/inputmask";
 import { useToast } from "@/context/hooks/use-toast";
-import { VALIDATION_RULES, PASSWORD_CRITERIA } from "@/utils/FormUtils";
+import { VALIDATION_RULES } from "@/utils/FormUtils";
+import { AuthLayout } from "@/layouts/AuthLayout";
+import { AuthHeader } from "@/components/Auth/AuthHeader";
+import { FormInput } from "@/components/Form/FormInput";
+import { FormPasswordInput } from "@/components/Form/FormPasswordInput";
+import { AuthFooter } from "@/components/Auth/AuthFooter";
+import { PasswordFooter } from "@/components/Form/PasswordFooter";
 
-// Constantes
 const FORM_DEFAULT_VALUES: IUserRegister = {
 	displayName: "",
 	email: "",
@@ -31,14 +31,13 @@ export const RegisterPage = () => {
 		control,
 		handleSubmit,
 		formState: { isSubmitting },
-		watch,
+		getValues,
 	} = useForm<IUserRegister>({
 		defaultValues: FORM_DEFAULT_VALUES,
-		mode: "onChange",
+		mode: "all",
 	});
 
 	const navigate = useNavigate();
-	const passwordValue = watch("password");
 
 	const { showToast } = useToast();
 
@@ -78,325 +77,95 @@ export const RegisterPage = () => {
 	);
 
 	return (
-		<div className="flex align-items-center justify-content-center min-h-screen">
-			<div className="lg:min-h-screen my-5 lg:my-0 bg-white col-10 lg:col-7 p-4 shadow-2 border-round flex flex-column xl:justify-content-center">
-				<header className="text-center">
-					<Link to="/" aria-label="Ir para página inicial">
-						<img
-							src="/assets/images/logo/logo_riffhouse_red.png"
-							alt="Logo Riff House"
-							className="w-12rem"
-						/>
-					</Link>
-					<h1 className="text-900 text-5xl font-medium mb-3 mt-0">
-						Cadastre sua conta
-					</h1>
-				</header>
+		<AuthLayout
+			backgroundImage="/assets/images/signup/fundo_signup.svg"
+			backgroundAlt="mulher clicando em botão play"
+		>
+			<AuthHeader title="Cadastre sua conta" />
 
-				<form
-					className="p-fluid flex flex-column gap-5 lg:gap-3"
-					onSubmit={handleSubmit(onSubmit)}
-					autoComplete="on"
-					noValidate
-				>
-					<div>
-						<label htmlFor="displayName" className="block mb-2">
-							Nome
-						</label>
-						<Controller
-							name="displayName"
-							control={control}
-							rules={VALIDATION_RULES.displayName}
-							render={({ field, fieldState }) => (
-								<>
-									<div className="p-inputgroup">
-										<InputText
-											id="displayName"
-											type="text"
-											autoComplete="name"
-											placeholder="Digite seu nome completo"
-											aria-describedby="displayName-error"
-											aria-invalid={!!fieldState.error}
-											className={classNames({
-												"p-invalid": fieldState.error,
-											})}
-											{...field}
-										/>
-										<span className="p-inputgroup-addon">
-											<i
-												className="pi pi-user"
-												aria-hidden="true"
-											></i>
-										</span>
-									</div>
-									{fieldState.error && (
-										<small
-											id="displayName-error"
-											className="p-error block mt-1"
-										>
-											{fieldState.error.message}
-										</small>
-									)}
-								</>
-							)}
-						/>
-					</div>
-
-					<div>
-						<label htmlFor="email" className="block mb-2">
-							Email
-						</label>
-						<Controller
-							name="email"
-							control={control}
-							rules={VALIDATION_RULES.email}
-							render={({ field, fieldState }) => (
-								<>
-									<div className="p-inputgroup">
-										<InputText
-											id="email"
-											type="email"
-											autoComplete="email"
-											placeholder="seu@email.com"
-											aria-describedby="email-error"
-											aria-invalid={!!fieldState.error}
-											className={classNames({
-												"p-invalid": fieldState.error,
-											})}
-											{...field}
-										/>
-										<span className="p-inputgroup-addon">
-											<i
-												className="pi pi-envelope"
-												aria-hidden="true"
-											></i>
-										</span>
-									</div>
-									{fieldState.error && (
-										<small
-											id="email-error"
-											className="p-error block mt-1"
-										>
-											{fieldState.error.message}
-										</small>
-									)}
-								</>
-							)}
-						/>
-					</div>
-
-					<div>
-						<label htmlFor="cpf" className="block mb-2">
-							Cpf
-						</label>
-						<Controller
-							name="cpf"
-							control={control}
-							rules={VALIDATION_RULES.cpf}
-							render={({ field, fieldState }) => (
-								<>
-									<div className="p-inputgroup">
-										<InputMask
-											id="cpf"
-											type="text"
-											autoComplete="cpf"
-											mask="999.999.999-99"
-											placeholder="000.000.000-00"
-											aria-describedby="cpf-error"
-											aria-invalid={!!fieldState.error}
-											className={classNames({
-												"p-invalid": fieldState.error,
-											})}
-											{...field}
-										/>
-										<span className="p-inputgroup-addon">
-											<i
-												className="pi pi-envelope"
-												aria-hidden="true"
-											></i>
-										</span>
-									</div>
-									{fieldState.error && (
-										<small
-											id="cpf-error"
-											className="p-error block mt-1"
-										>
-											{fieldState.error.message}
-										</small>
-									)}
-								</>
-							)}
-						/>
-					</div>
-
-					<div>
-						<label htmlFor="password" className="block mb-2">
-							Senha
-						</label>
-						<Controller
-							name="password"
-							control={control}
-							rules={VALIDATION_RULES.password}
-							render={({ field, fieldState }) => (
-								<>
-									<div className="p-inputgroup w-full">
-										<Password
-											inputId="password"
-											autoComplete="new-password"
-											placeholder="Digite uma senha forte"
-											aria-describedby="password"
-											aria-invalid={!!fieldState.error}
-											className={classNames(
-												{
-													"p-invalid":
-														fieldState.error,
-												},
-												"w-full"
-											)}
-											inputClassName="w-full"
-											toggleMask
-											feedback={false}
-											{...field}
-										/>
-										<span className="p-inputgroup-addon">
-											<i
-												className="pi pi-lock"
-												aria-hidden="true"
-											></i>
-										</span>
-									</div>
-									{/* Feedback visual da senha */}
-									{fieldState.error && (
-										<div className="password-criteria-container mt-2">
-											{PASSWORD_CRITERIA.map(
-												(criteria, index) => {
-													const isValid =
-														criteria.regex.test(
-															passwordValue
-														);
-													return (
-														<div
-															key={index}
-															className={`criteria-item ${
-																isValid
-																	? "valid"
-																	: "invalid"
-															}`}
-														>
-															<i
-																className={classNames(
-																	"pi",
-																	{
-																		"pi-check-circle":
-																			isValid,
-																		"pi-times-circle":
-																			!isValid,
-																	}
-																)}
-																aria-hidden="true"
-															></i>
-															<span>
-																{criteria.label}
-															</span>
-														</div>
-													);
-												}
-											)}
-										</div>
-									)}
-								</>
-							)}
-						/>
-					</div>
-
-					<div>
-						<label htmlFor="confirmPassword" className="block mb-2">
-							Confirmar Senha
-						</label>
-						<Controller
-							name="confirmPassword"
-							control={control}
-							rules={{
-								required: "Confirme sua senha",
-								validate: (value) =>
-									value === passwordValue ||
-									"As senhas não conferem",
-							}}
-							render={({ field, fieldState }) => (
-								<>
-									<div className="p-inputgroup w-full">
-										<Password
-											inputId="confirmPassword"
-											autoComplete="new-password"
-											placeholder="Digite a senha novamente"
-											aria-describedby="confirmPassword-error"
-											aria-invalid={!!fieldState.error}
-											className={classNames(
-												{
-													"p-invalid":
-														fieldState.error,
-												},
-												"w-full"
-											)}
-											inputClassName="w-full"
-											toggleMask
-											feedback={false}
-											{...field}
-										/>
-										<span className="p-inputgroup-addon">
-											<i
-												className="pi pi-lock"
-												aria-hidden="true"
-											></i>
-										</span>
-									</div>
-									{fieldState.error && (
-										<small
-											id="confirmPassword-error"
-											className="p-error block mt-1"
-										>
-											{fieldState.error.message}
-										</small>
-									)}
-								</>
-							)}
-						/>
-					</div>
-
-					<Button
-						// raised
-						label="Cadastrar"
-						type="submit"
-						className="w-full text-1xl form-submit-button"
-						loading={isSubmitting}
-						disabled={isSubmitting}
-						aria-label="Cadastrar nova conta"
-					/>
-
-					<div className="text-center flex flex-column lg:flex-row justify-content-center align-items-center gap-3">
-						<span className="text-lg">Já tem uma conta?</span>
-						<Link
-							to="/login"
-							className="link text-xl"
-							aria-label="Ir para página de login"
-						>
-							Faça login
-						</Link>
-					</div>
-				</form>
-			</div>
-
-			<aside
-				className="hidden lg:flex col-5 align-items-center justify-content-center"
-				aria-hidden="true"
+			<form
+				className="p-fluid flex flex-column gap-5 lg:gap-3"
+				onSubmit={handleSubmit(onSubmit)}
+				autoComplete="on"
+				noValidate
 			>
-				<img
-					src="/assets/images/signup/fundo_signup.svg"
-					className="image-background-forms"
-					alt="mulher clicando em botão play"
-					role="presentation"
+				<FormInput
+					control={control}
+					name="displayName"
+					label="Nome"
+					placeholder="Digite seu nome completo"
+					icon="pi-user"
+					autoComplete="name"
+					rules={VALIDATION_RULES.displayName}
 				/>
-			</aside>
-		</div>
+
+				<FormInput
+					control={control}
+					name="email"
+					label="Email"
+					placeholder="seu@email.com"
+					icon="pi-envelope"
+					type="email"
+					autoComplete="email"
+					rules={VALIDATION_RULES.email}
+				/>
+
+				<FormInput
+					control={control}
+					name="cpf"
+					label="Cpf"
+					placeholder="000.000.000-00"
+					icon="pi-id-card"
+					mask="999.999.999-99"
+					autoComplete="cpf"
+					rules={VALIDATION_RULES.cpf}
+				/>
+
+				<FormPasswordInput
+					control={control}
+					name="password"
+					label="Senha"
+					feedback={true}
+					placeholder="Digite uma senha forte"
+					rules={{
+						required: "Senha é obrigatória",
+						validate: VALIDATION_RULES.password.validate,
+					}}
+					autoComplete="new-password"
+					footer={
+						<PasswordFooter control={control} name="password" />
+					}
+				/>
+
+				<FormPasswordInput
+					control={control}
+					name="confirmPassword"
+					label="Confirmar Senha"
+					placeholder="Digite a senha novamente"
+					rules={{
+						required: "Confirme sua senha",
+						validate: (value) =>
+							value === getValues("password") ||
+							"As senhas não conferem",
+					}}
+					autoComplete="new-password"
+				/>
+
+				<Button
+					label="Cadastrar"
+					type="submit"
+					className="w-full text-1xl form-submit-button"
+					loading={isSubmitting}
+					disabled={isSubmitting}
+					aria-label="Cadastrar nova conta"
+				/>
+
+				<AuthFooter
+					text="Já tem uma conta?"
+					linkText="Faça login"
+					to="/login"
+				/>
+			</form>
+		</AuthLayout>
 	);
 };
