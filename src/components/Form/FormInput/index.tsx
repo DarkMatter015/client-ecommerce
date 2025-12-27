@@ -34,7 +34,7 @@ export const FormInput = ({
 	autoComplete,
 }: FormInputProps) => {
 	return (
-		<div>
+		<div className="form-group">
 			<label htmlFor={name} className="block mb-2">
 				{label}
 			</label>
@@ -54,8 +54,14 @@ export const FormInput = ({
 									placeholder={placeholder}
 									aria-describedby={`${name}-error`}
 									aria-invalid={!!fieldState.error}
-									className={classNames({
-										"p-invalid": fieldState.error,
+									className={classNames("w-full", {
+										"i-invalid":
+											fieldState.error ||
+											fieldState.invalid,
+										"i-valid":
+											!fieldState.error &&
+											!fieldState.invalid &&
+											field.value.length > 0,
 									})}
 									{...field}
 								/>
@@ -67,8 +73,14 @@ export const FormInput = ({
 									placeholder={placeholder}
 									aria-describedby={`${name}-error`}
 									aria-invalid={!!fieldState.error}
-									className={classNames({
-										"p-invalid": fieldState.error,
+									className={classNames("w-full", {
+										"i-invalid":
+											fieldState.error ||
+											fieldState.invalid,
+										"i-valid":
+											!fieldState.error &&
+											!fieldState.invalid &&
+											field.value.length > 0,
 									})}
 									{...field}
 								/>

@@ -2,20 +2,19 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
-import { classNames } from "primereact/utils";
 
 import type { IUserRegister } from "@/commons/types/types";
 import AuthService from "@/services/auth-service";
 
 import "@/styles/form.css";
-import "./register.style.css";
 import { useToast } from "@/context/hooks/use-toast";
-import { VALIDATION_RULES, PASSWORD_CRITERIA } from "@/utils/FormUtils";
+import { VALIDATION_RULES } from "@/utils/FormUtils";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { AuthHeader } from "@/components/Auth/AuthHeader";
 import { FormInput } from "@/components/Form/FormInput";
 import { FormPasswordInput } from "@/components/Form/FormPasswordInput";
 import { AuthFooter } from "@/components/Auth/AuthFooter";
+import { PasswordFooter } from "@/components/Form/PasswordFooter";
 
 const FORM_DEFAULT_VALUES: IUserRegister = {
 	displayName: "",
@@ -32,14 +31,13 @@ export const RegisterPage = () => {
 		control,
 		handleSubmit,
 		formState: { isSubmitting },
-		watch,
+		getValues,
 	} = useForm<IUserRegister>({
 		defaultValues: FORM_DEFAULT_VALUES,
 		mode: "all",
 	});
 
 	const navigate = useNavigate();
-	const passwordValue = watch("password");
 
 	const { showToast } = useToast();
 
@@ -76,31 +74,6 @@ export const RegisterPage = () => {
 			}
 		},
 		[navigate, showToast]
-	);
-
-	const passwordFooter = (
-		<div className="password-criteria-container mt-2">
-			{PASSWORD_CRITERIA.map((criteria, index) => {
-				const isValid = criteria.regex.test(passwordValue || "");
-				return (
-					<div
-						key={index}
-						className={`criteria-item ${
-							isValid ? "valid" : "invalid"
-						}`}
-					>
-						<i
-							className={classNames("pi", {
-								"pi-check-circle": isValid,
-								"pi-times-circle": !isValid,
-							})}
-							aria-hidden="true"
-						></i>
-						<span>{criteria.label}</span>
-					</div>
-				);
-			})}
-		</div>
 	);
 
 	return (
@@ -154,9 +127,14 @@ export const RegisterPage = () => {
 					label="Senha"
 					feedback={true}
 					placeholder="Digite uma senha forte"
-					rules={VALIDATION_RULES.password}
+					rules={{
+						required: "Senha é obrigatória",
+						validate: VALIDATION_RULES.password.validate,
+					}}
 					autoComplete="new-password"
-					footer={passwordFooter}
+					footer={
+						<PasswordFooter control={control} name="password" />
+					}
 				/>
 
 				<FormPasswordInput
@@ -167,7 +145,8 @@ export const RegisterPage = () => {
 					rules={{
 						required: "Confirme sua senha",
 						validate: (value) =>
-							value === passwordValue || "As senhas não conferem",
+							value === getValues("password") ||
+							"As senhas não conferem",
 					}}
 					autoComplete="new-password"
 				/>

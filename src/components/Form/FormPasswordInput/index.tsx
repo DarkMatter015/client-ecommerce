@@ -35,7 +35,7 @@ export const FormPasswordInput = ({
 	footer,
 }: FormPasswordInputProps) => {
 	return (
-		<div>
+		<div className="form-group">
 			<label htmlFor={name} className="block mb-2">
 				{label}
 			</label>
@@ -52,12 +52,14 @@ export const FormPasswordInput = ({
 								placeholder={placeholder}
 								aria-describedby={`${name}-error`}
 								aria-invalid={!!fieldState.error}
-								className={classNames(
-									{
-										"p-invalid": fieldState.error,
-									},
-									"w-full"
-								)}
+								className={classNames("w-full", {
+									"p-invalid":
+										fieldState.error || fieldState.invalid,
+									"p-valid":
+										!fieldState.error &&
+										!fieldState.invalid &&
+										field.value.length > 0,
+								})}
 								inputClassName="w-full"
 								toggleMask={toggleMask}
 								feedback={feedback}
