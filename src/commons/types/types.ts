@@ -90,6 +90,7 @@ export interface IAddress {
   city?: string;
   state?: string;
   cep: string;
+  active?: boolean;
 }
 
 export interface IProduct {
