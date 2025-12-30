@@ -16,7 +16,7 @@ import { Button } from "primereact/button";
 import { CheckoutOrderItems } from "@/components/Checkout/CheckoutorderItems";
 import { Summary } from "@/components/Summary";
 import { CheckoutPaymentMethod } from "@/components/Checkout/CheckoutPaymentMethod";
-import { RegisterAddressDialog } from "@/components/Address/RegisterAddressDialog";
+import { AddressDialog } from "@/components/Address/RegisterAddressDialog";
 import { AddressList } from "@/components/Address/AddressList";
 import { NavigatorLinearButtons } from "@/components/Checkout/NavigatorLinearButtons";
 import { OrderConfirmation } from "@/components/Checkout/OrderConfirmation";
@@ -24,25 +24,25 @@ import { OrderConfirmation } from "@/components/Checkout/OrderConfirmation";
 const CheckoutPage: React.FC = () => {
 	const { cartItems, freight } = useCart();
 
-    const [payments, setPayments] = useState<IPayment[]>([]);
-    const [paymentMethod, setPaymentMethod] = useState<IPayment | null>(null);
+	const [payments, setPayments] = useState<IPayment[]>([]);
+	const [paymentMethod, setPaymentMethod] = useState<IPayment | null>(null);
 
 	const [addresses, setAddresses] = useState<IAddress[]>([]);
 	const [selectedAddress, setSelectedAddress] = useState<IAddress | null>(
 		null
 	);
 
-    const [showAddressDialog, setShowAddressDialog] = useState(false);
-    const [newAddress, setNewAddress] = useState<Partial<IAddress>>({
-        street: "",
-        number: "",
-        complement: undefined,
-        neighborhood: "",
-        city: "",
-        state: "",
-        cep: "",
-    });
-    const [savingAddress, setSavingAddress] = useState(false);
+	const [showAddressDialog, setShowAddressDialog] = useState(false);
+	const [newAddress, setNewAddress] = useState<Partial<IAddress>>({
+		street: "",
+		number: "",
+		complement: undefined,
+		neighborhood: "",
+		city: "",
+		state: "",
+		cep: "",
+	});
+	const [savingAddress, setSavingAddress] = useState(false);
 
 	const navigate = useNavigate();
 	const { showToast } = useToast();
@@ -151,56 +151,41 @@ const CheckoutPage: React.FC = () => {
 		handlePlaceOrder();
 	};
 
-	const handleAddAddress = async () => {
-		if (
-			!newAddress.street ||
-			!newAddress.number ||
-			!newAddress.city ||
-			!newAddress.state ||
-			!newAddress.cep
-		) {
+	const handleAddAddress = async (formData: IAddress) => {
+		try {
+			setSavingAddress(true);
+			const response = await createAddress(formData);
+			if (response) {
+				setAddresses([...addresses, response]);
+				setSelectedAddress(response);
+				setShowAddressDialog(false);
+				setNewAddress({
+					street: "",
+					number: "",
+					complement: undefined,
+					neighborhood: "",
+					city: "",
+					state: "",
+					cep: "",
+				});
+				showToast(
+					"success",
+					"Endereço Adicionado",
+					"Endereço adicionado com sucesso!"
+				);
+			}
+		} catch (error) {
+			console.error("Erro ao adicionar endereço:", error);
 			showToast(
-				"warn",
-				"Campos Obrigatórios",
-				"Preencha todos os campos obrigatórios."
+				"error",
+				"Erro",
+				"Erro ao adicionar o endereço. Tente novamente.",
+				3000
 			);
-			return;
+		} finally {
+			setSavingAddress(false);
 		}
-
-        try {
-            setSavingAddress(true);
-            const response = await createAddress(newAddress as IAddress);
-            if (response) {
-                setAddresses([...addresses, response]);
-                setSelectedAddress(response);
-                setShowAddressDialog(false);
-                setNewAddress({
-                    street: "",
-                    number: "",
-                    complement: undefined,
-                    neighborhood: "",
-                    city: "",
-                    state: "",
-                    cep: "",
-                });
-                showToast(
-                    "success",
-                    "Endereço Adicionado",
-                    "Endereço adicionado com sucesso!"
-                );
-            }
-        } catch (error) {
-            console.error("Erro ao adicionar endereço:", error);
-            showToast(
-                "error",
-                "Erro",
-                "Erro ao adicionar o endereço. Tente novamente.",
-                3000
-            );
-        } finally {
-            setSavingAddress(false);
-        }
-    };
+	};
 
 	const handleAddressDialogHide = () => {
 		setShowAddressDialog(false);
@@ -261,14 +246,13 @@ const CheckoutPage: React.FC = () => {
 									/>
 								</div>
 
-								<RegisterAddressDialog
+								<AddressDialog
 									showAddressDialog={showAddressDialog}
 									handleAddressDialogHide={
 										handleAddressDialogHide
 									}
-									newAddress={newAddress}
-									setNewAddress={setNewAddress}
-									handleAddAddress={handleAddAddress}
+									address={newAddress}
+									handleSaveAddress={handleAddAddress}
 									savingAddress={savingAddress}
 								/>
 

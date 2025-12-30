@@ -1,0 +1,15 @@
+.address-management-view .p-dataview-content {
+	background: transparent !important;
+	padding: 0 !important;
+}
+
+.address-management-view .p-grid {
+	display: grid !important;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 1rem;
+	margin: 0 !important;
+}
+
+.address-management-view .col-12 {
+	padding: 0 !important;
+}

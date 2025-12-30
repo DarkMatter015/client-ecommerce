@@ -61,18 +61,6 @@ export const OrderCard: React.FC<{
 	toggleRowExpansion: (orderId: number) => void;
 }> = ({ order, totalItems, totalValue, isExpanded, toggleRowExpansion }) => {
 	const statusConfig = getStatusConfig(order.status);
-	const isAddressValid = (address: any) => {
-		if (!address) return false;
-		const requiredFields = [
-			"street",
-			"number",
-			"neighborhood",
-			"city",
-			"state",
-			"cep",
-		];
-		return requiredFields.every((field) => address[field]);
-	};
 
 	return (
 		<div key={order.id} className="order-card">
@@ -107,16 +95,11 @@ export const OrderCard: React.FC<{
 					</div>
 					<div className="order-card-address-summary">
 						<i className="pi pi-map-marker"></i>
-						{isAddressValid(order.address) ? (
 							<>
 								{order.address.street}, {order.address.number} -{" "}
 								{order.address.city}
 							</>
-						) : (
-							<span style={{ color: "var(--red-500)" }}>
-								Endereço inválido
-							</span>
-						)}
+						
 					</div>
 				</div>
 				<Button
@@ -154,7 +137,7 @@ export const OrderCard: React.FC<{
 						header="Endereço de Entrega"
 						className="order-address-panel"
 					>
-						{isAddressValid(order.address) ? (
+						
 							<div className="address-details">
 								<div className="address-line">
 									<strong>
@@ -176,26 +159,6 @@ export const OrderCard: React.FC<{
 									<strong>CEP:</strong> {order.address.cep}
 								</div>
 							</div>
-						) : (
-							<div
-								className="address-error"
-								style={{
-									color: "var(--red-500)",
-									backgroundColor: "var(--red-50)",
-									padding: "1rem",
-									borderRadius: "8px",
-									border: "1px solid var(--red-200)",
-								}}
-							>
-								<i
-									className="pi pi-exclamation-triangle"
-									style={{ marginRight: "0.5rem" }}
-								></i>
-								Endereço não encontrado ou inválido. Verifique
-								se o CEP está correto no cadastro ou se o
-								endereço foi preenchido corretamente.
-							</div>
-						)}
 					</Panel>
 
 					{order.shipment?.company && (

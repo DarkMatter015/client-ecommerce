@@ -32,7 +32,18 @@ export const FormInput = ({
 	placeholder,
 	mask,
 	autoComplete,
-}: FormInputProps) => {
+	disabled,
+	maxLength,
+	children,
+	minValue,
+	maxValue,
+}: FormInputProps & {
+	disabled?: boolean;
+	maxLength?: number;
+	children?: React.ReactNode;
+	minValue?: number;
+	maxValue?: number;
+}) => {
 	return (
 		<div className="form-group">
 			<label htmlFor={name} className="block mb-2">
@@ -49,9 +60,13 @@ export const FormInput = ({
 								<InputMask
 									id={name}
 									type={type}
+									min={minValue}
+									max={maxValue}
 									mask={mask}
 									autoComplete={autoComplete}
 									placeholder={placeholder}
+									disabled={disabled}
+									maxLength={maxLength}
 									aria-describedby={`${name}-error`}
 									aria-invalid={!!fieldState.error}
 									className={classNames("w-full", {
@@ -61,7 +76,7 @@ export const FormInput = ({
 										"i-valid":
 											!fieldState.error &&
 											!fieldState.invalid &&
-											field.value.length > 0,
+											field.value?.length > 0,
 									})}
 									{...field}
 								/>
@@ -69,8 +84,12 @@ export const FormInput = ({
 								<InputText
 									id={name}
 									type={type}
+									min={minValue}
+									max={maxValue}
 									autoComplete={autoComplete}
 									placeholder={placeholder}
+									disabled={disabled}
+									maxLength={maxLength}
 									aria-describedby={`${name}-error`}
 									aria-invalid={!!fieldState.error}
 									className={classNames("w-full", {
@@ -80,8 +99,31 @@ export const FormInput = ({
 										"i-valid":
 											!fieldState.error &&
 											!fieldState.invalid &&
-											field.value.length > 0,
+											field.value?.length > 0,
 									})}
+									onInput={(
+										e: React.FormEvent<HTMLInputElement>
+									) => {
+										if (type === "number"){
+										if (
+											maxLength &&
+											e.currentTarget.value.length >
+												maxLength
+										) {
+											e.currentTarget.value =
+												e.currentTarget.value.slice(
+													0,
+													maxLength
+												);
+										}
+										if (
+											minValue &&
+											e.currentTarget.valueAsNumber < minValue
+										) {
+											e.currentTarget.value = minValue.toString();
+										}
+									}
+									}}
 									{...field}
 								/>
 							)}
@@ -93,6 +135,7 @@ export const FormInput = ({
 									></i>
 								</span>
 							)}
+							{children}
 						</div>
 						{fieldState.error && (
 							<small

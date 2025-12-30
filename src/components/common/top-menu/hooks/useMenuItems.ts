@@ -53,6 +53,11 @@ export const useMenuItems = () => {
                   command: () => navigate("/pedidos"),
               },
               {
+                  label: "Meus Endereços",
+                  icon: "pi pi-map-marker",
+                  command: () => navigate("/enderecos"),
+              },
+              {
                   label: "Sair",
                   icon: "pi pi-sign-out",
                   command: () => handleLogout(),

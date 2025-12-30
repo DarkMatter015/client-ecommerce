@@ -16,7 +16,7 @@
     --gray-bg-hover: #c4c4c4;
     --gray-secondary-bg: #f1f3f6;
 
-    --green: #008000;
+    --green: #00aa00;
     --green-hover: #006100;
     --white: #ffffff;
     --black: #000000;
@@ -61,19 +61,27 @@ body {
 }
 
 .p-invalid input, .i-invalid{
-    border: solid 1px red !important;
+    border: solid 1px var(--secondary-color) !important;
 }
 
 .p-invalid input:focus, .i-invalid:focus{
-    box-shadow: #ffb3ba 0 0 0.5rem !important;
+    box-shadow: var(--secondary-color) 0 0 0.5rem !important;
+}
+
+.p-invalid input:hover, .i-invalid:hover{
+    border: solid 1px var(--primary-color) !important;
 }
 
 .p-valid input, .i-valid{
-    border: solid 1px green !important;
+    border: solid 1px var(--green) !important;
 }
 
 .p-valid input:focus, .i-valid:focus{
     box-shadow: #b3ffb9 0 0 0.5rem !important;
+}
+
+.p-valid input:hover, .i-valid:hover{
+    border: solid 1px var(--green-hover) !important;
 }
 
 .p-icon-field.p-icon-field-right {
