@@ -3,8 +3,7 @@ import { Button } from "primereact/button";
 import type React from "react";
 import "./summary.style.css";
 import { CalcFreight } from "../Freight/CalcFreight";
-import { use } from "react";
-import { CartContext } from "@/context/CartContext";
+import { useCart } from "@/context/hooks/use-cart";
 
 export const Summary: React.FC<{
 	title?: string;
@@ -15,6 +14,7 @@ export const Summary: React.FC<{
 	selectedAddress?: any;
 	actionButtonsDisabled?: boolean;
 	freightDisable?: boolean;
+	disabledNext?: boolean;
 }> = ({
 	title = "Resumo do Pedido",
 	primaryButtonLabel = "Avançar",
@@ -24,8 +24,9 @@ export const Summary: React.FC<{
 	selectedAddress,
 	actionButtonsDisabled = false,
 	freightDisable = false,
+	disabledNext = false,
 }) => {
-	const { cartMetrics, cartItems, freight } = use(CartContext);
+	const { cartMetrics, cartItems, freight } = useCart();
 	return (
 		<aside className="summary">
 			<div className="summary-sticky">
@@ -83,6 +84,7 @@ export const Summary: React.FC<{
 								className="btn-default btn-place-order w-full"
 								onClick={handleNext}
 								aria-label={primaryButtonLabel}
+								disabled={disabledNext}
 							/>
 
 							<Button

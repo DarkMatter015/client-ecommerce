@@ -43,6 +43,8 @@ export const FormInput = ({
 	children?: React.ReactNode;
 	minValue?: number;
 	maxValue?: number;
+	value?: string;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
 	return (
 		<div className="form-group">

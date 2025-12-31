@@ -1,0 +1,33 @@
+.payment-card {
+	background: var(--cart-card-bg);
+	padding: var(--cart-item-padding);
+	border-radius: var(--cart-border-radius);
+	box-shadow: var(--cart-shadow);
+}
+
+.payment-card h4 {
+	font-size: 1.1rem;
+	font-weight: 600;
+	margin: 0 0 1rem 0;
+	color: var(--cart-text-primary);
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* Payment Select */
+.payment-select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: var(--cart-transition);
+}
+
+.payment-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}

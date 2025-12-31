@@ -1,5 +1,6 @@
 import type { IItem } from "@/commons/types/types";
 import { ItemCartCheckout } from "../ItemCartCheckout";
+import "./checkout-order-items.style.css";
 
 export const CheckoutOrderItems: React.FC<{ cartItems: IItem[] | undefined }> = ({
     cartItems,
@@ -15,8 +16,11 @@ export const CheckoutOrderItems: React.FC<{ cartItems: IItem[] | undefined }> = 
             </h3>
             <div className="order-item-list">
                 {cartItems?.map((item) => (
-                    <ItemCartCheckout key={item.product.id} item={item} />
-                ))}
+                    <>
+                        <ItemCartCheckout key={item.product.id} item={item} />
+                        <span className="order-item-divider"></span>
+                    </>
+                ))} 
             </div>
         </section>
     );

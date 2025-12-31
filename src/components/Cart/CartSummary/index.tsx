@@ -3,17 +3,16 @@ import { useCart } from "@/context/hooks/use-cart";
 import { formatCurrency, getItemCountText } from "@/utils/Utils";
 import { Button } from "primereact/button";
 import type React from "react";
-import { useState } from "react";
+import "./cart-summary.style.css";
 
 export const CartSummary: React.FC<{
     onFinalize: () => void;
 }> = ({ onFinalize }) => {
-    const [cep, setCep] = useState("");
     const { cartItems, cartMetrics } = useCart();
 
     return (
-        <aside className="summary" aria-label="Resumo da compra">
-            <div className="summary-sticky">
+        <aside className="cart-summary" aria-label="Resumo da compra">            
+            <div className="cart-summary-sticky">
                 <section className="summary-card">
                     <h3>Resumo da Compra</h3>
                     <div className="summary-line">
@@ -26,9 +25,8 @@ export const CartSummary: React.FC<{
                     {cartMetrics && cartMetrics?.totalItems > 0 && (
                         <div className="summary-line">
                             <CalcFreight
-                                cep={cep}
-                                setCep={setCep}
                                 produtos={cartItems || []}
+                                selectedFreightDisabled={true}
                             />
                         </div>
                     )}
@@ -42,6 +40,7 @@ export const CartSummary: React.FC<{
                 </section>
 
                 <Button
+                    severity="success"
                     raised
                     icon="pi pi-check"
                     label="Finalizar Compra"

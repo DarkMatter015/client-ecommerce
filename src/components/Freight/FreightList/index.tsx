@@ -8,7 +8,8 @@ import { useCart } from "@/context/hooks/use-cart";
 
 export const FreightList: React.FC<{
     freights: IFreightResponse[];
-}> = ({ freights }) => {
+    selectedFreightDisabled?: boolean;
+}> = ({ freights, selectedFreightDisabled = false }) => {
 
     const getDiscountedPrice = (price: number, discount: number) => {
         return price - (price * discount) / 100;
@@ -70,6 +71,7 @@ export const FreightList: React.FC<{
                 value={freights}
                 emptyMessage="Nenhuma opção de frete disponível"
                 selectionMode="single" selection={freight} onSelectionChange={(e) => onSetFreight(e.value as IFreightResponse)} dataKey="id" metaKeySelection={false}
+                isDataSelectable={() => !selectedFreightDisabled}
             >
                 <Column
                     header="Transportadora"

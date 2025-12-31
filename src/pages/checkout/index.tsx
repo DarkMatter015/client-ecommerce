@@ -18,11 +18,11 @@ import { Summary } from "@/components/Summary";
 import { CheckoutPaymentMethod } from "@/components/Checkout/CheckoutPaymentMethod";
 import { AddressDialog } from "@/components/Address/RegisterAddressDialog";
 import { AddressList } from "@/components/Address/AddressList";
-import { NavigatorLinearButtons } from "@/components/Checkout/NavigatorLinearButtons";
 import { OrderConfirmation } from "@/components/Checkout/OrderConfirmation";
+import { CalcFreight } from "@/components/Freight/CalcFreight";
 
 const CheckoutPage: React.FC = () => {
-	const { cartItems, freight } = useCart();
+	const { cartItems, freight, cleanCart } = useCart();
 
 	const [payments, setPayments] = useState<IPayment[]>([]);
 	const [paymentMethod, setPaymentMethod] = useState<IPayment | null>(null);
@@ -46,8 +46,11 @@ const CheckoutPage: React.FC = () => {
 
 	const navigate = useNavigate();
 	const { showToast } = useToast();
+	const [paymentSuccess, setPaymentSuccess] = useState(false);
 
 	useEffect(() => {
+		if (paymentSuccess) return;
+
 		if (!cartItems || cartItems.length === 0) {
 			navigate("/carrinho");
 			return;
@@ -104,6 +107,9 @@ const CheckoutPage: React.FC = () => {
 				"Você será redirecionado para a página de pedidos ...",
 				3000
 			);
+
+			setPaymentSuccess(true);
+			cleanCart();
 
 			setTimeout(() => {
 				navigate("/pedidos");
@@ -218,7 +224,7 @@ const CheckoutPage: React.FC = () => {
 				className="mx-3"
 			>
 				<StepperPanel header="Seus Itens">
-					<div className="lg:flex block justify-content-between gap-3 rounded">
+					<div className="step1-container">
 						<CheckoutOrderItems cartItems={cartItems} />
 						<Summary
 							handleNext={() =>
@@ -231,67 +237,74 @@ const CheckoutPage: React.FC = () => {
 					</div>
 				</StepperPanel>
 				<StepperPanel header="Entrega">
-					<div className="">
-						<div className="">
-							<div className="p-col-12 p-md-6">
-								<div style={{ marginBottom: "1rem" }}>
-									<Button
-										label="Adicionar Novo Endereço"
-										icon="pi pi-plus"
-										onClick={() =>
-											setShowAddressDialog(true)
-										}
-										className="p-button-outlined"
-										style={{ width: "100%" }}
-									/>
-								</div>
-
-								<AddressDialog
-									showAddressDialog={showAddressDialog}
-									handleAddressDialogHide={
-										handleAddressDialogHide
-									}
-									address={newAddress}
-									handleSaveAddress={handleAddAddress}
-									savingAddress={savingAddress}
-								/>
-
-								<AddressList
-									addresses={addresses}
-									onSelectAddress={setSelectedAddress}
-									selectedAddress={selectedAddress}
+					<div className="step1-container">
+						<div className="step2-container">
+							<div style={{ marginBottom: "1rem" }}>
+								<Button
+									label="Adicionar Novo Endereço"
+									icon="pi pi-plus"
+									onClick={() => setShowAddressDialog(true)}
+									className="p-button-outlined"
+									style={{ width: "100%" }}
 								/>
 							</div>
-							<Summary
-								title="Escolha o Frete"
+
+							<AddressDialog
+								showAddressDialog={showAddressDialog}
+								handleAddressDialogHide={
+									handleAddressDialogHide
+								}
+								address={newAddress}
+								handleSaveAddress={handleAddAddress}
+								savingAddress={savingAddress}
+							/>
+
+							<AddressList
+								addresses={addresses}
+								onSelectAddress={setSelectedAddress}
 								selectedAddress={selectedAddress}
-								actionButtonsDisabled={true}
+							/>
+
+							<CalcFreight
+								produtos={cartItems || []}
+								cep={selectedAddress?.cep}
+								inputDisabled={true}
 							/>
 						</div>
+						<Summary
+							title="Escolha o Endereço e Frete"
+							freightDisable={true}
+							handleNext={() =>
+								stepperRef?.current?.nextCallback()
+							}
+							handleGoBack={() =>
+								stepperRef?.current?.prevCallback()
+							}
+							disabledNext={
+								selectedAddress && freight ? false : true
+							}
+						/>
 					</div>
-					<NavigatorLinearButtons
-						stepperRef={stepperRef}
-						disableNext={selectedAddress && freight ? false : true}
-					/>
 				</StepperPanel>
 				<StepperPanel header="Pagamento">
-					<div className="">
-						<div className="">
-							<CheckoutPaymentMethod
-								payments={payments}
-								paymentMethod={paymentMethod}
-								setPaymentMethod={setPaymentMethod}
-							/>
-							<Summary
-								actionButtonsDisabled={true}
-								freightDisable={true}
-							/>
-						</div>
+					<div className="step1-container">
+						<CheckoutPaymentMethod
+							payments={payments}
+							paymentMethod={paymentMethod}
+							setPaymentMethod={setPaymentMethod}
+						/>
+						<Summary
+							title="Escolha o Método de Pagamento"
+							freightDisable={true}
+							handleNext={() =>
+								stepperRef?.current?.nextCallback()
+							}
+							handleGoBack={() =>
+								stepperRef?.current?.prevCallback()
+							}
+							disabledNext={paymentMethod ? false : true}
+						/>
 					</div>
-					<NavigatorLinearButtons
-						stepperRef={stepperRef}
-						disableNext={paymentMethod ? false : true}
-					/>
 				</StepperPanel>
 				<StepperPanel header="Confirmação">
 					<div className="">

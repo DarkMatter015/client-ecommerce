@@ -81,6 +81,7 @@ export function useFreight(cep: string, produtos: IItem[]) {
 
     return {
         freightsData,
+        setFreightsData,
         selectedFreight,
         setSelectedFreight,
         handleCalculateFreight,

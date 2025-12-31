@@ -3,3 +3,7 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.btn-freight span {
+    color: white !important;
+}
