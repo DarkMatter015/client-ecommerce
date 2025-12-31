@@ -13,7 +13,7 @@ export const CartSummary: React.FC<{
     return (
         <aside className="cart-summary" aria-label="Resumo da compra">            
             <div className="cart-summary-sticky">
-                <section className="summary-card">
+                <section className="cart-summary-card">
                     <h3>Resumo da Compra</h3>
                     <div className="summary-line">
                         <span>
@@ -44,7 +44,7 @@ export const CartSummary: React.FC<{
                     raised
                     icon="pi pi-check"
                     label="Finalizar Compra"
-                    className="btn-default btn-finalize w-full"
+                    className="btn-finalize w-full"
                     onClick={onFinalize}
                     disabled={cartMetrics?.totalItems === 0}
                     aria-label="Finalizar compra"

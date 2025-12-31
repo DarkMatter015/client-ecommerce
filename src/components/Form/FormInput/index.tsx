@@ -6,6 +6,7 @@ import {
 import { InputText } from "primereact/inputtext";
 import { InputMask } from "primereact/inputmask";
 import { classNames } from "primereact/utils";
+import "./form-input-style.css";
 
 interface FormInputProps {
 	control: Control<any>;
@@ -71,15 +72,19 @@ export const FormInput = ({
 									maxLength={maxLength}
 									aria-describedby={`${name}-error`}
 									aria-invalid={!!fieldState.error}
-									className={classNames("w-full", {
-										"i-invalid":
-											fieldState.error ||
-											fieldState.invalid,
-										"i-valid":
-											!fieldState.error &&
-											!fieldState.invalid &&
-											field.value?.length > 0,
-									})}
+									className={classNames(
+										"form-input",
+										"w-full",
+										{
+											"i-invalid":
+												fieldState.error ||
+												fieldState.invalid,
+											"i-valid":
+												!fieldState.error &&
+												!fieldState.invalid &&
+												field.value?.length > 0,
+										}
+									)}
 									{...field}
 								/>
 							) : (
@@ -94,37 +99,43 @@ export const FormInput = ({
 									maxLength={maxLength}
 									aria-describedby={`${name}-error`}
 									aria-invalid={!!fieldState.error}
-									className={classNames("w-full", {
-										"i-invalid":
-											fieldState.error ||
-											fieldState.invalid,
-										"i-valid":
-											!fieldState.error &&
-											!fieldState.invalid &&
-											field.value?.length > 0,
-									})}
+									className={classNames(
+										"form-input",
+										"w-full",
+										{
+											"i-invalid":
+												fieldState.error ||
+												fieldState.invalid,
+											"i-valid":
+												!fieldState.error &&
+												!fieldState.invalid &&
+												field.value?.length > 0,
+										}
+									)}
 									onInput={(
 										e: React.FormEvent<HTMLInputElement>
 									) => {
-										if (type === "number"){
-										if (
-											maxLength &&
-											e.currentTarget.value.length >
-												maxLength
-										) {
-											e.currentTarget.value =
-												e.currentTarget.value.slice(
-													0,
+										if (type === "number") {
+											if (
+												maxLength &&
+												e.currentTarget.value.length >
 													maxLength
-												);
+											) {
+												e.currentTarget.value =
+													e.currentTarget.value.slice(
+														0,
+														maxLength
+													);
+											}
+											if (
+												minValue &&
+												e.currentTarget.valueAsNumber <
+													minValue
+											) {
+												e.currentTarget.value =
+													minValue.toString();
+											}
 										}
-										if (
-											minValue &&
-											e.currentTarget.valueAsNumber < minValue
-										) {
-											e.currentTarget.value = minValue.toString();
-										}
-									}
 									}}
 									{...field}
 								/>

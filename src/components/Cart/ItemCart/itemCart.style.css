@@ -176,3 +176,28 @@
   width: fit-content;
   align-self: flex-start;
 }
+
+@media (max-width: 768px) {
+  .cart-item {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    gap: 1rem !important;
+  }
+
+  .cart-item-image {
+    width: var(--cart-image-size-tablet);
+    height: var(--cart-image-size-tablet);
+  }
+
+  .cart-item-actions {
+    grid-column: 1 / -1;
+    /* flex-direction: row !important; */
+    justify-content: space-between;
+    align-items: center !important;
+    width: 100%;
+  }
+
+  .cart-item-price {
+    font-size: 1.3rem;
+  }
+}

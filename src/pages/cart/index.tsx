@@ -65,7 +65,7 @@ const CartPage: React.FC = () => {
 
 			<div className="cart-container">
 				<section
-					className="cart-products"
+					className="cart-products-container"
 					aria-label="Produtos no carrinho"
 				>
 					<CartHeader

@@ -22,7 +22,7 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
 	freight,
 }) => {
 	return (
-		<div className="flex flex-column gap-4">
+		<div className="flex flex-column gap-0 lg:gap-3">
 			<section
 				className="checkout-card"
 				aria-labelledby="confirmation-items-heading"

@@ -1,6 +1,6 @@
 import { formatCurrency, getItemCountText } from "@/utils/Utils";
 import { Button } from "primereact/button";
-import type React from "react";
+import React, { useState } from "react";
 import "./summary.style.css";
 import { CalcFreight } from "../Freight/CalcFreight";
 import { useCart } from "@/context/hooks/use-cart";
@@ -9,7 +9,7 @@ export const Summary: React.FC<{
 	title?: string;
 	primaryButtonLabel?: string;
 	secondaryButtonLabel?: string;
-	handleNext?: () => void | undefined;
+	handleNext?: () => void | Promise<void> | undefined;
 	handleGoBack?: () => void;
 	selectedAddress?: any;
 	actionButtonsDisabled?: boolean;
@@ -27,6 +27,24 @@ export const Summary: React.FC<{
 	disabledNext = false,
 }) => {
 	const { cartMetrics, cartItems, freight } = useCart();
+	const [isLoading, setIsLoading] = useState(false);
+
+	const handleNextClick = async () => {
+		if (handleNext) {
+			const result = handleNext();
+			if (result && typeof (result as any).then === "function") {
+				setIsLoading(true);
+				try {
+					await result;
+				} catch (error) {
+					console.error(error);
+				} finally {
+					setIsLoading(false);
+				}
+			}
+		}
+	};
+
 	return (
 		<aside className="summary">
 			<div className="summary-sticky">
@@ -78,13 +96,18 @@ export const Summary: React.FC<{
 						<>
 							<Button
 								severity="success"
-								icon="pi pi-arrow-right"
+								icon={
+									isLoading
+										? "pi pi-spin pi-spinner"
+										: "pi pi-arrow-right"
+								}
 								iconPos="right"
 								label={primaryButtonLabel}
-								className="btn-default btn-place-order w-full"
-								onClick={handleNext}
+								className="btn-place-order w-full"
+								onClick={handleNextClick}
 								aria-label={primaryButtonLabel}
-								disabled={disabledNext}
+								disabled={disabledNext || isLoading}
+								loading={isLoading}
 							/>
 
 							<Button

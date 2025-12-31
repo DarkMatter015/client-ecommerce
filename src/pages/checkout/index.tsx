@@ -128,7 +128,7 @@ const CheckoutPage: React.FC = () => {
 		navigate("/carrinho");
 	};
 
-	const handleFinalize = () => {
+	const handleFinalize = async () => {
 		if (!selectedAddress) {
 			showToast(
 				"warn",
@@ -154,7 +154,7 @@ const CheckoutPage: React.FC = () => {
 			return;
 		}
 
-		handlePlaceOrder();
+		await handlePlaceOrder();
 	};
 
 	const handleAddAddress = async (formData: IAddress) => {
@@ -307,28 +307,26 @@ const CheckoutPage: React.FC = () => {
 					</div>
 				</StepperPanel>
 				<StepperPanel header="Confirmação">
-					<div className="">
-						<div className="">
-							<OrderConfirmation
-								cartItems={cartItems || []}
+					<div>
+						<OrderConfirmation
+							cartItems={cartItems || []}
+							selectedAddress={selectedAddress}
+							paymentMethod={paymentMethod}
+							freight={freight}
+						/>
+						<div className="mt-4 w-full">
+							<Summary
+								primaryButtonLabel="Finalizar Pedido"
+								title="Total do Pedido"
+								secondaryButtonLabel="Voltar"
+								handleNext={handleFinalize}
+								handleGoBack={() =>
+									stepperRef?.current?.prevCallback()
+								}
 								selectedAddress={selectedAddress}
-								paymentMethod={paymentMethod}
-								freight={freight}
+								freightDisable={true}
+								actionButtonsDisabled={false}
 							/>
-							<div className="mt-4 w-full">
-								<Summary
-									primaryButtonLabel="Finalizar Pedido"
-									title="Total do Pedido"
-									secondaryButtonLabel="Voltar"
-									handleNext={handleFinalize}
-									handleGoBack={() =>
-										stepperRef?.current?.prevCallback()
-									}
-									selectedAddress={selectedAddress}
-									freightDisable={true}
-									actionButtonsDisabled={false}
-								/>
-							</div>
 						</div>
 					</div>
 				</StepperPanel>

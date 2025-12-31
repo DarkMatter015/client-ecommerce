@@ -1,3 +1,11 @@
+:root {
+	--checkout-padding-mobile: 1rem;
+	--checkout-padding-tablet: 1.5rem;
+	--checkout-gap: 2rem;
+	--checkout-summary-width: 400px;
+}
+
+
 /* ===========================
    MAIN LAYOUT
 =========================== */
@@ -14,10 +22,10 @@
 	position: relative;
 	max-width: 100%;
 	margin: 0 auto;
-	padding: 0 var(--cart-padding-mobile);
+	padding: 0 var(--checkout-padding-mobile);
 	display: grid;
-	grid-template-columns: 1fr var(--cart-summary-width);
-	gap: var(--cart-gap);
+	grid-template-columns: 1fr var(--checkout-summary-width);
+	gap: var(--checkout-gap);
 	align-items: start;
 }
 
@@ -25,6 +33,7 @@
 	background-color: #fff;
 	padding: 1rem;
 	border-radius: 0.5rem;
+	max-width: 100%;
 }
 
 /* ===========================
@@ -67,7 +76,9 @@
 @media (max-width: 1024px) {
 	.step1-container {
 		grid-template-columns: 1fr;
-		padding: 0 var(--cart-padding-tablet);
+		padding: 0 var(--checkout-padding-tablet);
+		margin-top: 1rem;
+		gap: 0;
 	}
 }
 
@@ -87,4 +98,8 @@
 		text-align: left;
 		margin-top: 0.5rem;
 	}
+
+	/* .step2-container {
+		max-width: 90%;
+	} */
 }

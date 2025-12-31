@@ -26,7 +26,7 @@ export const FreightList: React.FC<{
                         e.currentTarget.src = "/placeholder-shipping.png";
                     }}
                 />
-                <span>{rowData.company.name}</span>
+                {/* <span className="company-name">{rowData.company.name}</span> */}
             </div>
         );
     };
@@ -70,11 +70,16 @@ export const FreightList: React.FC<{
             <DataTable
                 value={freights}
                 emptyMessage="Nenhuma opção de frete disponível"
-                selectionMode="single" selection={freight} onSelectionChange={(e) => onSetFreight(e.value as IFreightResponse)} dataKey="id" metaKeySelection={false}
+                selectionMode="single" 
+                selection={freight} 
+                onSelectionChange={(e) => onSetFreight(e.value as IFreightResponse)} 
+                dataKey="id" 
+                metaKeySelection={false}
                 isDataSelectable={() => !selectedFreightDisabled}
+                className="freight-datatable"
             >
                 <Column
-                    header="Transportadora"
+                    header="Transp."
                     body={companyTemplate}
                     style={{ width: "30%" }}
                 />

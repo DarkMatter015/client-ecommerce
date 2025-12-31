@@ -71,11 +71,11 @@ export const CalcFreight: React.FC<{
 						aria-label="Calcular frete e prazo"
 						severity="help"
 						className="btn-freight"
-						label={loading ? "Carregando..." : "Calcular"}
+						label={loading ? "Calculando..." : "Calcular"}
 						icon={loading ? "pi pi-spin pi-spinner" : null}
 					/>
 				</div>
-				<a href="#" className="small">
+				<a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" className="small">
 					Não sei meu CEP
 				</a>
 			</div>

@@ -31,10 +31,6 @@
 	color: var(--cart-text-primary);
 }
 
-.summary-line.discount {
-	color: var(--cart-discount-color);
-}
-
 .summary-divider {
 	height: 1px;
 	background: var(--cart-border-color);
