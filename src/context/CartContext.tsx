@@ -16,7 +16,7 @@ interface CartContextType {
 	handleUpdateQuantity: (id: number, newQuantity: number) => void;
 	cleanCart: () => void;
 	freight: IFreightResponse | null;
-	onSetFreight: (freight: IFreightResponse) => void;
+	onSetFreight: (freight: IFreightResponse | null) => void;
 }
 
 interface CartProviderProps {
@@ -139,7 +139,7 @@ export function CartProvider({ children }: CartProviderProps) {
 		);
 	};
 
-	const onSetFreight = (freight: IFreightResponse) => {
+	const onSetFreight = (freight: IFreightResponse | null) => {
 		setFreight(freight);
 		console.log(freight);
 	};

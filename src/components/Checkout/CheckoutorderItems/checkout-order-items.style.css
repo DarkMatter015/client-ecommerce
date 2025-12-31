@@ -1,0 +1,48 @@
+.order-item-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.checkout-card {
+	background-color: #fff;
+	border-radius: 8px;
+	padding: 1.5rem;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+	width: 100%;
+}
+
+.checkout-card h3 {
+	font-size: 1.5rem;
+	margin-bottom: 1.5rem;
+	color: #333;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 1rem;
+}
+
+.checkout-card h3 .pi {
+	margin-right: 0.75rem;
+	color: #d9534f;
+}
+
+.order-item-divider {
+	border: 1px solid #eee;
+}
+
+@media (max-width: 1024px) {
+	.checkout-card {
+		margin-top: 1rem;
+	}
+}
+
+@media (max-width: 768px) {
+	.checkout-card {
+		padding: 1rem;
+	}
+
+	.checkout-card h3 {
+		font-size: 1.25rem;
+	}
+}

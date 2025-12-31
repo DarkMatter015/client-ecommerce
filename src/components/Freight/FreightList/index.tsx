@@ -8,7 +8,8 @@ import { useCart } from "@/context/hooks/use-cart";
 
 export const FreightList: React.FC<{
     freights: IFreightResponse[];
-}> = ({ freights }) => {
+    selectedFreightDisabled?: boolean;
+}> = ({ freights, selectedFreightDisabled = false }) => {
 
     const getDiscountedPrice = (price: number, discount: number) => {
         return price - (price * discount) / 100;
@@ -25,7 +26,7 @@ export const FreightList: React.FC<{
                         e.currentTarget.src = "/placeholder-shipping.png";
                     }}
                 />
-                <span>{rowData.company.name}</span>
+                {/* <span className="company-name">{rowData.company.name}</span> */}
             </div>
         );
     };
@@ -69,10 +70,16 @@ export const FreightList: React.FC<{
             <DataTable
                 value={freights}
                 emptyMessage="Nenhuma opção de frete disponível"
-                selectionMode="single" selection={freight} onSelectionChange={(e) => onSetFreight(e.value as IFreightResponse)} dataKey="id" metaKeySelection={false}
+                selectionMode="single" 
+                selection={freight} 
+                onSelectionChange={(e) => onSetFreight(e.value as IFreightResponse)} 
+                dataKey="id" 
+                metaKeySelection={false}
+                isDataSelectable={() => !selectedFreightDisabled}
+                className="freight-datatable"
             >
                 <Column
-                    header="Transportadora"
+                    header="Transp."
                     body={companyTemplate}
                     style={{ width: "30%" }}
                 />

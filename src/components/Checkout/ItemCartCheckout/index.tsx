@@ -1,6 +1,7 @@
 import type { IItem } from "@/commons/types/types";
 import { formatCurrency } from "@/utils/Utils";
 import type React from "react";
+import "./item-cart-checkout.style.css";
 
 export const ItemCartCheckout: React.FC<{
     item: IItem
