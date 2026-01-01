@@ -33,7 +33,7 @@ export const ContainerProductImage: React.FC<{
     };
 
     return (
-        <div className="col-12 lg:col-6 flex flex-column align-items-center">
+        <div className="col-12 lg:col-5 flex flex-column align-items-center">
             <div
                 className="product-image border"
                 role="img"

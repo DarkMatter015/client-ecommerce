@@ -169,3 +169,18 @@ export interface IFreightResponse {
         picture: string
     };
 }
+
+export interface IAlertRequest {
+    email: string;
+    productId: number;
+}
+
+export interface IAlertResponse {
+    id: number;
+    email: string;
+    productId: number;
+    productName: string;
+    requestDate: string;
+    processedAt: string;
+    status: string;
+}
