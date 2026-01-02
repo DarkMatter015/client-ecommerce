@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import "./product.style.css";
 import { useParams } from "react-router-dom";
 import { getProductById } from "@/services/product-service";
@@ -7,7 +7,7 @@ import { ProductDescription } from "@/components/Product/ProductDescription";
 import { ContainerProductInformations } from "@/components/Product/ContainerProductInformations";
 import { ContainerProductImage } from "@/components/Product/ContainerProductImage";
 
-const ProductPage: React.FC = () => {
+const ProductPage = () => {
     const params = useParams();
     const idParam = params.id;
     const [produto, setProduto] = useState<IProduct>({} as IProduct);
@@ -42,7 +42,7 @@ const ProductPage: React.FC = () => {
         fetchProduct();
     }, [idParam]);
 
-    if (loading) return <div className="loading">Carregando produtos ...</div>;
+    if (loading) return <div className="loading">Carregando produto ...</div>;
     if (error) return <div className="error">{error}</div>;
 
     return (

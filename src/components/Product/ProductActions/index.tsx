@@ -2,11 +2,10 @@ import type { IProduct } from "@/commons/types/types";
 import { Button } from "primereact/button";
 import type React from "react";
 
-import "./product-actions.style.css";
 import { useProduct } from "@/hooks/useProduct";
 import { useEffect, useState } from "react";
-import { Dialog } from "primereact/dialog";
-import { EmailForm } from "@/components/EmailForm";
+import "./product-actions.style.css";
+import { AlertProduct } from "@/components/AlertProduct";
 
 export const ProductActions: React.FC<{
 	product: IProduct;
@@ -16,7 +15,6 @@ export const ProductActions: React.FC<{
 	const [stock, setStock] = useState<number>(
 		product?.quantityAvailableInStock
 	);
-	const [visible, setVisible] = useState(false);
 
 	useEffect(() => {
 		setStock(product?.quantityAvailableInStock);
@@ -24,30 +22,7 @@ export const ProductActions: React.FC<{
 
 	const getButtons = () => {
 		if (stock == 0) {
-			return (
-				<>
-					<Button
-						className="w-full button-action"
-						severity="help"
-						onClick={() => setVisible(true)}
-						aria-label="Me avise quando estiver disponível"
-						icon="pi pi-bell"
-					>
-						Me avise quando estiver disponível
-					</Button>
-					<Dialog
-						visible={visible}
-						modal
-						onHide={() => {
-							if (!visible) return;
-							setVisible(false);
-						}}
-						content={({ hide }) => (
-							<EmailForm hide={hide} product={product} />
-						)}
-					/>
-				</>
-			);
+			return <AlertProduct product={product} />;
 		} else {
 			return (
 				<>
@@ -70,6 +45,9 @@ export const ProductActions: React.FC<{
 					>
 						Adicionar ao Carrinho
 					</Button>
+					<AlertProduct
+						product={product}
+					/>
 				</>
 			);
 		}

@@ -1,125 +1,112 @@
-import type { IProduct } from "@/commons/types/types";
+import type { IAlertRequest, IProduct } from "@/commons/types/types";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import type React from "react";
 
-import "./email-form.style.css";
 import { useToast } from "@/context/hooks/use-toast";
-import { Controller, useForm } from "react-hook-form";
-import { classNames } from "primereact/utils";
+import { VALIDATION_RULES } from "@/utils/FormUtils";
+import { useForm } from "react-hook-form";
+import { FormInput } from "../Form/FormInput";
+import "./email-form.style.css";
+import { postAlert } from "@/services/alerts-service";
+import { useAuth } from "@/context/hooks/use-auth";
+import { useEffect } from "react";
+import { QuantityTagProduct } from "../Product/QuantityTagProduct";
 
-export const EmailForm: React.FC<{
+interface EmailFormProps {
 	hide: (e: React.SyntheticEvent | any) => void;
 	product: IProduct;
-}> = ({ hide, product }) => {
-	/* const [email, setEmail] = useState<string>(""); */ // Removed manual state
-	const { showToast } = useToast();
+}
 
-	const VALIDATION_RULES = {
-		email: {
-			required: "Email é obrigatório",
-			pattern: {
-				value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-				message: "Email inválido",
-			},
-		},
-	} as const;
+export const EmailForm = ({ hide, product }: EmailFormProps) => {
+	const { showToast } = useToast();
+	const { authenticatedUser } = useAuth();
 
 	const {
 		control,
 		handleSubmit,
 		reset,
-		formState: { isSubmitting },
+		formState: { isSubmitting, isValid },
 	} = useForm<{ email: string }>({
 		defaultValues: { email: "" },
-		mode: "onChange",
+		mode: "all",
 	});
 
-	const onSubmit = (data: { email: string }) => {
-		// Simulate API call or logic
-		console.log("Email submitted:", data.email);
-		showToast(
-			"success",
-			"Sucesso",
-			"Iremos te mandar um email quando o produto estiver disponível!"
-		);
-		reset();
-		hide(data as any);
+	useEffect(() => {
+		if (authenticatedUser) {
+			reset({ email: authenticatedUser.email });
+		}
+	}, [authenticatedUser]);
+
+	const onSubmit = async (data: { email: string }) => {
+		try {
+			const alertRequest: IAlertRequest = {
+				email: data.email,
+				productId: product.id,
+			};
+			const response = await postAlert(alertRequest);
+			if (response.status === 201) {
+				showToast(
+					"success",
+					"Sucesso",
+					"Iremos te mandar um email quando o produto tiver mais estoque!"
+				);
+				reset();
+				hide(null);
+			} else {
+				showToast("error", "Erro", response.data.message);
+			}
+		} catch (err: any) {
+			console.error("Erro ao enviar alerta", err);
+			showToast("error", "Erro", err.response?.data?.message);
+		}
 	};
 
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
 			noValidate
-			className="email-form shadow-none border-none"
+			className="email-form"
 		>
-			<div className="text-center mb-3">
-				<h3 className="text-900 font-bold text-xl mb-1">Avise-me</h3>
-				<p className="text-500 m-0">
-					Receba um email quando este produto estiver disponível.
-				</p>
+			<div className="email-form-header">
+				<h3>Avise-me</h3>
+				<p>Receba um email quando este produto receber mais estoque.</p>
 			</div>
 
-			<div className="flex align-items-center gap-3 p-3 surface-ground border-round-lg shadow-1 w-full">
+			<div className="email-form-product-card">
 				<img
-					src={product.urlImage || "/assets/images/common/unavailable_image_product.png"}
+					src={
+						product.urlImage ||
+						"/assets/images/common/unavailable_image_product.png"
+					}
 					alt={product.name}
-					className="w-4rem h-4rem border-round object-cover shadow-1 bg-white"
 				/>
-				<div className="flex flex-column gap-1">
-					<span className="font-semibold text-700 text-lg">
+				<div className="email-form-product-card-info">
+					<span className="email-form-product-card-info-name">
 						{product.name}
 					</span>
-					<div className="flex align-items-center gap-2">
-						<span className="text-green-600 font-bold">
+					<div className="email-form-product-card-info">
+						<span className="email-form-product-card-info-price">
 							R$ {product.price?.toFixed(2).replace(".", ",")}
+						</span>
+						<span>
+							<QuantityTagProduct product={product} />
 						</span>
 					</div>
 				</div>
 			</div>
 
-			<div className="form-group w-full mt-3">
-				<label
-					htmlFor="email"
-					className="text-700 font-medium mb-2 block"
-				>
-					Seu melhor Email
-				</label>
-				<Controller
-					name="email"
-					control={control}
-					rules={VALIDATION_RULES.email}
-					render={({ field, fieldState }) => (
-						<>
-							<InputText
-								id="email"
-								type="email"
-								autoComplete="email"
-								placeholder="seu@email.com"
-								aria-describedby="email-error"
-								aria-invalid={!!fieldState.error}
-								className={classNames(
-									{
-										"p-invalid": fieldState.error,
-									},
-									"w-full p-3 border-round-md border-1 border-300 focus:border-primary transition-colors"
-								)}
-								{...field}
-							/>
-							{fieldState.error && (
-								<small
-									id="email-error"
-									className="p-error block mt-1"
-								>
-									{fieldState.error.message}
-								</small>
-							)}
-						</>
-					)}
-				/>
-			</div>
+			<FormInput
+				control={control}
+				name="email"
+				label="Seu melhor email"
+				placeholder="seu@email.com"
+				rules={VALIDATION_RULES.email}
+				autoComplete="email"
+				type="email"
+				value={authenticatedUser?.email}
+			/>
 
-			<div className="flex justify-content-end gap-2 mt-4 w-full">
+			<div className="email-form-actions">
 				<Button
 					label="Cancelar"
 					type="button"
@@ -134,7 +121,7 @@ export const EmailForm: React.FC<{
 					label="Avise-me"
 					type="submit"
 					severity="help"
-					loading={isSubmitting}
+					disabled={isSubmitting || !isValid}
 				/>
 			</div>
 		</form>
