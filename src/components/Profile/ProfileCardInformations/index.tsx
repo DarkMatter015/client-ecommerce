@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/context/hooks/use-toast";
 import { useAuth } from "@/context/hooks/use-auth";
 import type { IUserUpdate } from "@/commons/types/types";
-import AuthService from "@/services/auth-service";
+import { updateProfile } from "@/services/auth-service";
 import { useForm, Controller } from "react-hook-form";
 import { createValidationRules } from "@/utils/FormUtils";
 import { classNames } from "primereact/utils";
@@ -81,28 +81,16 @@ export const ProfileCardInformations = () => {
 
 		try {
 			setIsSaving(true);
-            data.id = authenticatedUser?.id;
-			const response = await AuthService.updateProfile(data);
+			data.id = authenticatedUser?.id;
+			await updateProfile(data);
 
-			if (response.status == 200) {
-				setAuthenticatedUser({
-					...authenticatedUser!,
-					displayName: data.displayName || "",
-					email: data.email || "",
-				});
-				setIsEditing(false);
-				showToast(
-					"success",
-					"Sucesso",
-					"Perfil atualizado com sucesso!"
-				);
-			} else {
-				showToast(
-					"error",
-					"Erro",
-					response.message || "Erro ao atualizar o perfil"
-				);
-			}
+			setAuthenticatedUser({
+				...authenticatedUser!,
+				displayName: data.displayName || "",
+				email: data.email || "",
+			});
+			setIsEditing(false);
+			showToast("success", "Sucesso", "Perfil atualizado com sucesso!");
 		} catch (error: any) {
 			console.error("Erro ao atualizar perfil:", error);
 			showToast(
@@ -133,10 +121,7 @@ export const ProfileCardInformations = () => {
 					noValidate
 				>
 					<div className="input-group">
-						<label
-							htmlFor="displayName"
-							className="field-label"
-						>
+						<label htmlFor="displayName" className="field-label">
 							Nome de Usuário
 						</label>
 						{isEditing ? (
@@ -215,8 +200,8 @@ export const ProfileCardInformations = () => {
 						)}
 					</div>
 
-                    {/* TODO: Make the authenticated user return the full UserResponseDTO and get the cpf */}
-                    {/* <div className="input-group">
+					{/* TODO: Make the authenticated user return the full UserResponseDTO and get the cpf */}
+					{/* <div className="input-group">
 						<label htmlFor="cpf" className="field-label">
 							Cpf
 						</label>

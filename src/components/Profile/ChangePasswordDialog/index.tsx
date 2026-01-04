@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { useForm } from "react-hook-form";
 import type { IChangePassword } from "@/commons/types/types";
-import AuthService from "@/services/auth-service";
+import { changePassword } from "@/services/auth-service";
 import { useToast } from "@/context/hooks/use-toast";
 import { FormPasswordInput } from "@/components/Form/FormPasswordInput";
 import { PasswordFooter } from "@/components/Form/PasswordFooter";
@@ -22,7 +22,7 @@ export const ChangePasswordDialog = () => {
 	const {
 		control,
 		handleSubmit,
-		getValues,
+		watch,
 		formState: { isSubmitting, isValid },
 		reset,
 	} = useForm<IChangePassword>({
@@ -32,28 +32,17 @@ export const ChangePasswordDialog = () => {
 
 	const handleChangePassword = async (data: IChangePassword) => {
 		try {
-			const response = await AuthService.changePassword(data);
+			await changePassword(data);
 
-			if (response.status == 200) {
-				setVisible(false);
-				reset();
-				showToast("success", "Sucesso", "Senha alterada com sucesso!");
-
-				reset();
-				setVisible(false);
-			} else {
-				showToast(
-					"error",
-					"Erro",
-					response.message || "Erro ao alterar a senha"
-				);
-			}
+			setVisible(false);
+			reset();
+			showToast("success", "Sucesso", "Senha alterada com sucesso!");
 		} catch (error: any) {
-			console.log(error);
 			showToast(
 				"error",
 				"Erro",
-				error.message || "Erro ao alterar a senha. Tente novamente."
+				error.response.data.message ||
+					"Erro ao alterar a senha. Tente novamente."
 			);
 		}
 	};
@@ -113,9 +102,9 @@ export const ChangePasswordDialog = () => {
 						placeholder="Digite uma senha forte"
 						rules={{
 							required: "Nova Senha é obrigatória",
-							validate: VALIDATION_RULES.password.validate
+							validate: VALIDATION_RULES.password.validate,
 						}}
-						autoComplete="newPassword"
+						autoComplete="new-password"
 						footer={
 							<PasswordFooter
 								control={control}
@@ -131,7 +120,7 @@ export const ChangePasswordDialog = () => {
 						rules={{
 							required: "Confirme sua senha",
 							validate: (value) =>
-								value === getValues("newPassword") ||
+								value === watch("newPassword") ||
 								"As senhas não conferem",
 						}}
 						autoComplete="new-password"

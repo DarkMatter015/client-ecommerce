@@ -1,9 +1,9 @@
 import { AddressManagementTable } from "@/components/Address/AddressManagementTable";
 import { useToast } from "@/context/hooks/use-toast";
-import { getAllAddressesPageable } from "@/services/address-service";
 import { Paginator } from "primereact/paginator";
 import { useEffect, useState } from "react";
 import type { IAddress } from "@/commons/types/types";
+import { getAddresses } from "@/services/address-service";
 
 export const AddressesPage = () => {
 	const { showToast } = useToast();
@@ -17,7 +17,10 @@ export const AddressesPage = () => {
 	const fetchAddresses = async (pageIndex: number, pageSize: number) => {
 		setLoading(true);
 		try {
-			const response = await getAllAddressesPageable(pageIndex, pageSize);
+			const response = await getAddresses(
+				pageIndex,
+				pageSize
+			);
 			if (response) {
 				setAddresses(response.content);
 				setTotalElements(response.totalElements);

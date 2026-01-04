@@ -2,7 +2,7 @@ import type { IForgotPassword } from "@/commons/types/types";
 import { AuthFooter } from "@/components/Auth/AuthFooter";
 import { FormInput } from "@/components/Form/FormInput";
 import { useToast } from "@/context/hooks/use-toast";
-import AuthService from "@/services/auth-service";
+import { forgotPassword } from "@/services/auth-service";
 import { VALIDATION_RULES } from "@/utils/FormUtils";
 import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";
@@ -21,28 +21,20 @@ export const EmailRecoveryPasswordForm = () => {
 
 	const onSubmit = async (data: IForgotPassword) => {
 		try {
-			const response = await AuthService.forgotPassword(data);
-			if (response.success) {
-				toast.showToast(
-					"success",
-					"Email enviado",
-					response.message || "Email enviado com sucesso!"
-				);
-				reset();
-			} else {
-				toast.showToast(
-					"error",
-					"Erro",
-					response.message ||
-						"Erro ao enviar email. Tente novamente mais tarde."
-				);
-			}
+			await forgotPassword(data);
+			toast.showToast(
+				"success",
+				"Email enviado",
+				"Se esse email estiver correto, você receberá um email com um link para redefinir sua senha."
+			);
+			reset();
 		} catch (error: any) {
 			console.error(error);
 			toast.showToast(
 				"error",
 				"Erro",
-				error.message || "Erro ao enviar."
+				error.response.data.message ||
+					"Erro ao enviar o email. Tente novamente mais tarde."
 			);
 		}
 	};

@@ -1,13 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./checkout.style.css";
-import { getAllPaymentsPageable } from "@/services/payment-service";
 import type { IAddress, IPayment } from "@/commons/types/types";
-import {
-	createAddress,
-	getAllAddressesPageable,
-} from "@/services/address-service";
-import { postOrder } from "@/services/order-service";
 import { useCart } from "@/context/hooks/use-cart";
 import { useToast } from "@/context/hooks/use-toast";
 import { Stepper } from "primereact/stepper";
@@ -20,6 +14,9 @@ import { AddressDialog } from "@/components/Address/RegisterAddressDialog";
 import { AddressList } from "@/components/Address/AddressList";
 import { OrderConfirmation } from "@/components/Checkout/OrderConfirmation";
 import { CalcFreight } from "@/components/Freight/CalcFreight";
+import { getPayments } from "@/services/payment-service";
+import { createAddress, getAddresses } from "@/services/address-service";
+import { createOrder } from "@/services/order-service";
 
 const CheckoutPage: React.FC = () => {
 	const { cartItems, freight, cleanCart } = useCart();
@@ -58,23 +55,25 @@ const CheckoutPage: React.FC = () => {
 
 		const fetchPayments = async () => {
 			try {
-				const response = await getAllPaymentsPageable(0, 10);
+				const response = await getPayments(0, 10);
 				if (response) {
 					setPayments(response.content);
 				}
 			} catch (err) {
 				console.error("Erro ao buscar pagamentos:", err);
+				showToast("error", "Erro ao buscar pagamentos", "Tente novamente mais tarde.");
 			}
 		};
 
 		const fetchAddress = async () => {
 			try {
-				const response = await getAllAddressesPageable(0, 10);
+				const response = await getAddresses(0, 10);
 				if (response) {
 					setAddresses(response.content);
 				}
 			} catch (err) {
 				console.error("Erro ao buscar endereços:", err);
+				showToast("error", "Erro ao buscar endereços", "Tente novamente mais tarde.");
 			}
 		};
 
@@ -84,16 +83,12 @@ const CheckoutPage: React.FC = () => {
 
 	const handlePlaceOrder = async () => {
 		try {
-			const response = await postOrder(
-				cartItems,
-				selectedAddress,
-				paymentMethod,
-				freight?.id || null
+			const response = await createOrder(
+				cartItems!,
+				selectedAddress!,
+				paymentMethod!,
+				freight!.id
 			);
-
-			if (response?.status != 201) {
-				throw new Error(response?.status.toString());
-			}
 
 			console.log("Pedido realizado:", {
 				cartItems,
@@ -103,7 +98,7 @@ const CheckoutPage: React.FC = () => {
 
 			showToast(
 				"success",
-				`Pedido ${response?.data.id} Realizado com sucesso!`,
+				`Pedido ${response.id} Realizado com sucesso!`,
 				"Você será redirecionado para a página de pedidos ...",
 				3000
 			);
@@ -325,6 +320,7 @@ const CheckoutPage: React.FC = () => {
 								}
 								selectedAddress={selectedAddress}
 								freightDisable={true}
+								disabledNext={paymentSuccess}
 								actionButtonsDisabled={false}
 							/>
 						</div>

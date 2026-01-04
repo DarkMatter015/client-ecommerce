@@ -6,85 +6,74 @@ import { calculateFreightByProducts } from "@/services/freight-service";
 import { useToast } from "@/context/hooks/use-toast";
 
 export function useFreight(cep: string, produtos: IItem[]) {
-    const { showToast } = useToast();
-    const [freightsData, setFreightsData] = useState<
-        IFreightResponse[] | undefined
-    >(undefined);
-    const [loading, setLoading] = useState(false);
+	const { showToast } = useToast();
+	const [freightsData, setFreightsData] = useState<
+		IFreightResponse[] | undefined
+	>(undefined);
+	const [loading, setLoading] = useState(false);
 
-    const [selectedFreight, setSelectedFreight] =
-        useState<IFreightResponse | null>(null);
+	const [selectedFreight, setSelectedFreight] =
+		useState<IFreightResponse | null>(null);
 
-    const handleCalculateFreight = useCallback(async () => {
-        const cepFormat = cep.replace(/[^0-9]/g, "");
-        if (cepFormat && cepFormat.length === 8) {
-            const freight: IFreightRequest = {
-                to: {
-                    postal_code: cepFormat,
-                },
-                products: produtos.map((produto) => ({
-                    id: produto.product.id,
-                    insurance_value: produto.product.price,
-                    quantity: produto.quantity,
-                })),
-            };
+	const handleCalculateFreight = useCallback(async () => {
+		const cepFormat = cep.replace(/[^0-9]/g, "");
+		if (cepFormat && cepFormat.length === 8) {
+			const freight: IFreightRequest = {
+				to: {
+					postal_code: cepFormat,
+				},
+				products: produtos.map((produto) => ({
+					id: produto.product.id,
+					insurance_value: produto.product.price,
+					quantity: produto.quantity,
+				})),
+			};
 
-            try {
-                setLoading(true);
-                const response = await calculateFreightByProducts(freight);
+			try {
+				setLoading(true);
+				const response = await calculateFreightByProducts(freight);
 
-                if (response.success) {
-                    showToast(
-                        "success",
-                        "Sucesso",
-                        response.message || "Frete calculado com sucesso!",
-                        2000
-                    );
+				showToast(
+					"success",
+					"Sucesso",
+					"Frete calculado com sucesso!",
+					2000
+				);
 
-                    console.log(response);
+				console.log(response);
 
-                    setFreightsData(
-                        Array.isArray(response?.data)
-                            ? (response.data as IFreightResponse[])
-                            : undefined
-                    );
-                } else {
-                    if (response.status === 422 || response.status === 400)
-                        showToast(
-                            "error",
-                            "Erro ao calcular frete",
-                            "CEP Inválido!",
-                            2000
-                        );
-                        setFreightsData(undefined);
-                }
-            } catch (error: any) {
-                showToast(
-                    "error",
-                    "Erro ao calcular frete",
-                    error.message,
-                    2000
-                );
-                setFreightsData(undefined);
-            }
-        } else {
-            showToast(
-                "error",
-                "CEP inválido",
-                "Por favor, insira um CEP válido de 8 caracteres.",
-                2000
-            );
-            setFreightsData(undefined);
-        }
-        setLoading(false);
-    }, [cep, produtos, showToast]);
+				setFreightsData(
+					Array.isArray(response)
+						? (response as IFreightResponse[])
+						: undefined
+				);
+			} catch (error: any) {
+				showToast(
+					"error",
+					"Erro ao calcular frete",
+					"CEP inválido",
+					2000
+				);
+				setFreightsData(undefined);
+			}
+		} else {
+			showToast(
+				"error",
+				"CEP inválido",
+				"Por favor, insira um CEP válido de 8 caracteres.",
+				2000
+			);
+			setFreightsData(undefined);
+		}
+		setLoading(false);
+	}, [cep, produtos, showToast]);
 
-    return {
-        freightsData,
-        setFreightsData,
-        selectedFreight,
-        setSelectedFreight,
-        handleCalculateFreight,
-        loading,
-    };
+	return {
+		freightsData,
+		setFreightsData,
+		selectedFreight,
+		setSelectedFreight,
+		handleCalculateFreight,
+		loading,
+	};
 }

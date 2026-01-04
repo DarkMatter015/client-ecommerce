@@ -1,4 +1,4 @@
-import type { IProduct } from "@/commons/types/types";
+import { Item, type IProduct } from "@/commons/types/types";
 import { useCart } from "@/context/hooks/use-cart";
 import { useToast } from "@/context/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +38,8 @@ export function useProduct() {
         if (!validateStockCartProduct(produto, quantity)) {
             return;
         }
-        addItem({product: produto, quantity: quantity}, false);
+        const newItem = new Item(produto, quantity, undefined);
+        addItem(newItem, false);
         navigate("/carrinho");
     }
 
@@ -46,7 +47,8 @@ export function useProduct() {
         if (!validateStockCartProduct(produto, quantity)) {
             return;
         }
-        addItem({product: produto, quantity: quantity});
+        const newItem = new Item(produto, quantity, undefined);
+        addItem(newItem);
     }
 
     const validateStock = (stock: number) => {

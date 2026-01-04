@@ -5,14 +5,14 @@ import React, { useState } from "react";
 import "./styles.css";
 import { CardAddress } from "../CardAddres";
 import { useToast } from "@/context/hooks/use-toast";
-import {
-	activeAddress,
-	createAddress,
-	deleteAddress,
-	updateAddress,
-} from "@/services/address-service";
 import { AddressDialog } from "../RegisterAddressDialog";
 import { Button } from "primereact/button";
+import {
+	activateAddress,
+	deleteAddress,
+	createAddress,
+	updateAddress,
+} from "@/services/address-service";
 
 interface AddressManagementTableProps {
 	addresses: IAddress[];
@@ -64,30 +64,19 @@ export const AddressManagementTable: React.FC<AddressManagementTableProps> = ({
 
 	const handleAction = async (id: number, action: string) => {
 		try {
-			const success =
-				action === "deletar"
-					? await deleteAddress(id)
-					: await activeAddress(id);
-			if (success) {
-				onRefresh();
-				setTimeout(() => {
-					showToast(
-						"success",
-						"Sucesso",
-						`Endereço ${
-							action === "deletar" ? "excluído" : "ativado"
-						} com sucesso.`
-					);
-				}, 500);
-			} else {
+			action === "deletar"
+				? await deleteAddress(id)
+				: await activateAddress(id);
+			onRefresh();
+			setTimeout(() => {
 				showToast(
-					"error",
-					"Erro",
-					`Falha ao ${
-						action === "deletar" ? "excluir" : "ativar"
-					} o endereço.`
+					"success",
+					"Sucesso",
+					`Endereço ${
+						action === "deletar" ? "excluído" : "ativado"
+					} com sucesso.`
 				);
-			}
+			}, 500);
 		} catch (error) {
 			console.error(
 				`Erro ao ${

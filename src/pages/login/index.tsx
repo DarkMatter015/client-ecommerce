@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import "./login.style.css";
 
 import { useAuth } from "@/context/hooks/use-auth";
-import AuthService from "@/services/auth-service";
+import { login } from "@/services/auth-service";
 import { VALIDATION_RULES, createValidationRules } from "@/utils/FormUtils.ts";
 
 import "@/styles/form.css";
@@ -44,29 +44,17 @@ export const LoginPage = () => {
 	const onSubmit = useCallback(
 		async (userLogin: IUserLogin) => {
 			try {
-				const response = await AuthService.login(userLogin);
+				const response = await login(userLogin);
 
-				if (response.success && response.data) {
-					const authenticationResponse =
-						response.data as IAuthenticationResponse;
-					handleLogin(authenticationResponse);
+				const authenticationResponse =
+					response.data as IAuthenticationResponse;
+				handleLogin(authenticationResponse);
 
-					showToast(
-						"success",
-						"Sucesso",
-						"Login efetuado com sucesso."
-					);
+				showToast("success", "Sucesso", "Login efetuado com sucesso.");
 
-					setTimeout(() => {
-						navigate("/", { replace: true });
-					}, NAVIGATION_DELAY);
-				} else {
-					showToast(
-						"error",
-						"Erro",
-						"Falha ao efetuar login. Verifique suas credenciais e tente novamente."
-					);
-				}
+				setTimeout(() => {
+					navigate("/", { replace: true });
+				}, NAVIGATION_DELAY);
 			} catch (error) {
 				console.error("Login error:", error);
 				showToast(
@@ -129,8 +117,6 @@ export const LoginPage = () => {
 					aria-label="Entrar na conta"
 					label="Entrar na conta"
 				/>
-
-				
 
 				<AuthFooter
 					text="Não tem uma conta?"
