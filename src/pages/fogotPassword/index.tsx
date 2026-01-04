@@ -3,7 +3,7 @@ import { EmailRecoveryPasswordForm } from "@/components/ForgotPassword/EmailReco
 import { ResetPasswordForm } from "@/components/ForgotPassword/ResetPasswordForm";
 import { useToast } from "@/context/hooks/use-toast";
 import { AuthLayout } from "@/layouts/AuthLayout";
-import AuthService from "@/services/auth-service";
+import { validateResetToken } from "@/services/auth-service";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -15,23 +15,14 @@ export const ForgotPasswordPage = () => {
 
 	const validateToken = async (token: string) => {
 		try {
-			const response = await AuthService.validateResetToken(token);
-			if (response.success) {
-				return true;
-			} else {
-				toast.showToast(
-					"error",
-					"Erro na validação do token",
-					response.message || "Token inválido."
-				);
-			}
-			return false;
+			await validateResetToken(token);
+			return true;
 		} catch (error: any) {
 			console.error(error);
 			toast.showToast(
 				"error",
 				"Erro na validação do token",
-				error.message || "Token inválido."
+				error.response.data.message || "Token inválido ou Expirado."
 			);
 			return false;
 		}

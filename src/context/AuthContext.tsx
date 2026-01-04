@@ -6,7 +6,7 @@ import type {
 } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
-import AuthService from "@/services/auth-service";
+import { validateToken } from "@/services/auth-service";
 
 interface AuthContextType {
   authenticated: boolean;
@@ -45,19 +45,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           return;
         }
 
-        const response = await AuthService.validateToken(storedToken);
+        const response = await validateToken(storedToken);
 
-        if (response.success && storedUser) {
+        if (response && storedUser) {
           const parsedUser = JSON.parse(storedUser);
           setAuthenticatedUser(parsedUser);
           setAuthenticated(true);
-        } else {
-          // token inválido -> manter dados no localStorage para possível reautenticação, apenas desautenticar
-          console.warn(
-            "Token inválido ou expirado, mantendo dados para reautenticação"
-          );
-          setAuthenticated(false);
-          setAuthenticatedUser(undefined);
         }
       } catch (err) {
         // falha de rede ou erro inesperado: deixar não autenticado, mas não navegar

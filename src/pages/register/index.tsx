@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 
 import type { IUserRegister } from "@/commons/types/types";
-import AuthService from "@/services/auth-service";
+import { signup } from "@/services/auth-service";
 
 import "@/styles/form.css";
 import { useToast } from "@/context/hooks/use-toast";
@@ -45,25 +45,16 @@ export const RegisterPage = () => {
 		async (data: IUserRegister) => {
 			try {
 				data.cpf = data.cpf.replace(/\D/g, "");
-				const response = await AuthService.signup(data);
+				await signup(data);
+				showToast(
+					"success",
+					"Sucesso",
+					"Usuário cadastrado com sucesso."
+				);
 
-				if (response.success && response.data) {
-					showToast(
-						"success",
-						"Sucesso",
-						"Usuário cadastrado com sucesso."
-					);
-
-					setTimeout(() => {
-						navigate("/login", { replace: true });
-					}, NAVIGATION_DELAY);
-				} else {
-					showToast(
-						"error",
-						"Erro",
-						"Falha ao cadastrar usuário. Verifique os dados e tente novamente."
-					);
-				}
+				setTimeout(() => {
+					navigate("/login", { replace: true });
+				}, NAVIGATION_DELAY);
 			} catch (error) {
 				console.error("Register error:", error);
 				showToast(

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllProductsFiltered } from "@/services/product-service";
+import { getProductsFiltered } from "@/services/product-service";
 import type { IProduct } from "@/commons/types/types";
 
 interface ProductGroup {
@@ -24,7 +24,7 @@ export const useProductSearch = () => {
                 if (!q.length) {
                     filtered = [...products];
                 } else {
-                    const response = await getAllProductsFiltered(0, 20, q, undefined);
+                    const response = await getProductsFiltered(0, 20, q, undefined);
                     filtered = response.content || [];
                 }
 
@@ -49,21 +49,7 @@ export const useProductSearch = () => {
     };
 
     useEffect(() => {
-        let mounted = true;
-        const load = async () => {
-            try {
-                const resp = await getAllProductsFiltered(0, 20, undefined, undefined);
-                if (!mounted) return;
-                setProducts(resp.content || []);
-            } catch (err) {
-                console.error("Erro ao carregar produtos para autocomplete", err);
-            }
-        };
-
-        load();
-        return () => {
-            mounted = false;
-        };
+        setProducts([]);
     }, []);
 
     return {

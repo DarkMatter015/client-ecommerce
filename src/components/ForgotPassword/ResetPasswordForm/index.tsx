@@ -3,7 +3,7 @@ import { AuthFooter } from "@/components/Auth/AuthFooter";
 import { FormPasswordInput } from "@/components/Form/FormPasswordInput";
 import { PasswordFooter } from "@/components/Form/PasswordFooter";
 import { useToast } from "@/context/hooks/use-toast";
-import AuthService from "@/services/auth-service";
+import { resetPassword } from "@/services/auth-service";
 import { VALIDATION_RULES } from "@/utils/FormUtils";
 import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";
@@ -20,42 +20,32 @@ export const ResetPasswordForm = ({ token }: { token: string }) => {
 		handleSubmit,
 		formState: { isSubmitting, isValid },
 		watch,
-        reset,
+		reset,
 	} = useForm<IResetPassword>({
 		defaultValues: DEFAULT_VALUES,
 		mode: "all",
 	});
 	const toast = useToast();
 	const navigate = useNavigate();
-    const newPassword = watch("newPassword");
+	const newPassword = watch("newPassword");
 
 	const onSubmit = async (data: IResetPassword) => {
-        
 		try {
-            data.token = token;
-			const response = await AuthService.resetPassword(data);
-			if (response.success) {
-				toast.showToast(
-					"success",
-					"Senha alterada",
-					response.message || "Senha alterada com sucesso!"
-				);
-                reset();
-				setTimeout(() => navigate("/login"), 3000);
-			} else {
-				toast.showToast(
-					"error",
-					"Erro",
-					response.message ||
-						"Erro ao alterar senha. Tente novamente mais tarde."
-				);
-			}
+			data.token = token;
+			await resetPassword(data);
+			toast.showToast(
+				"success",
+				"Senha alterada",
+				"Senha alterada com sucesso!"
+			);
+			reset();
+			setTimeout(() => navigate("/login"), 3000);
 		} catch (error: any) {
 			console.error(error);
 			toast.showToast(
 				"error",
 				"Erro",
-				error.message || "Erro ao alterar senha."
+				error.response.data.message || "Erro ao alterar senha."
 			);
 		}
 	};
@@ -76,7 +66,7 @@ export const ResetPasswordForm = ({ token }: { token: string }) => {
 					required: "Senha é obrigatória",
 					validate: VALIDATION_RULES.password.validate,
 				}}
-                feedback={true}
+				feedback={true}
 				autoComplete="new-password"
 				footer={<PasswordFooter control={control} name="newPassword" />}
 			/>

@@ -11,6 +11,7 @@ export interface IPage<T> {
   totalPages: number;
   size: number;
   number: number;
+  empty: boolean;
 }
 
 export interface IUserRegister {

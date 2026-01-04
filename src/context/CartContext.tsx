@@ -86,6 +86,7 @@ export function CartProvider({ children }: CartProviderProps) {
 
 				return [...prev, newItem];
 			});
+			console.log(cartItems);
 		}
 
 		// Exibe toast se solicitado
@@ -102,7 +103,8 @@ export function CartProvider({ children }: CartProviderProps) {
 
 	const deleteItem = (item: IItem) => {
 		setCartItems((prev: IItem[]) => {
-			return prev.filter((i: IItem) => i.id !== item.id);
+			const filteredItems = prev.filter((i: IItem) => i.id !== item.id);
+			return filteredItems.map((i, index) => ({ ...i, id: index + 1 }));
 		});
 	};
 
@@ -112,11 +114,11 @@ export function CartProvider({ children }: CartProviderProps) {
 	};
 
 	const handleUpdateQuantity = (id: number, newQuantity: number) => {
-		const cartProduct = cartItems.find(item => item.product.id == id);
+		const cartProduct = cartItems.find((item) => item.product.id == id);
 		if (
 			cartProduct &&
 			newQuantity > cartProduct.product.quantityAvailableInStock
-		) {            
+		) {
 			showToast(
 				"error",
 				"Quantidade insuficiente",

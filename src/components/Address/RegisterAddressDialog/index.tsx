@@ -37,7 +37,7 @@ export const AddressDialog: React.FC<{
 }) => {
 	const { showToast } = useToast();
 	const [isValidatingCep, setIsValidatingCep] = useState(false);
-	const [invalidCep, setInvalidCep] = useState<string>("");
+	const [invalidCep, setInvalidCep] = useState<string>();
 	const isEditing = !!initialAddress.id;
 
 	const {
@@ -62,15 +62,14 @@ export const AddressDialog: React.FC<{
 				...DEFAULT_VALUES,
 				...initialAddress,
 			});
+			setInvalidCep("");
 		}
 	}, [showAddressDialog, initialAddress, reset]);
 
 	const dialogTitle =
-		title ||
-		(isEditing ? "Editar Endereço" : "Adicionar Novo Endereço");
+		title || (isEditing ? "Editar Endereço" : "Adicionar Novo Endereço");
 	const buttonLabel =
-		submitLabel ||
-		(isEditing ? "Salvar Alterações" : "Salvar Endereço");
+		submitLabel || (isEditing ? "Salvar Alterações" : "Salvar Endereço");
 
 	const handleSearchCep = async () => {
 		const cep = getValues("cep");
@@ -88,33 +87,29 @@ export const AddressDialog: React.FC<{
 		try {
 			setIsValidatingCep(true);
 			const response = await validateCep(cleanCep);
+			
+			const data = response.data as IAddress;
+			setValue("street", data.street || "");
+			setValue("neighborhood", data.neighborhood || "");
+			setValue("city", data.city || "");
+			setValue("state", data.state || "");
+			setValue("cep", cleanCep);
 
-			if (response.success) {
-				const data = response.data as IAddress;
-				setValue("street", data.street || "");
-				setValue("neighborhood", data.neighborhood || "");
-				setValue("city", data.city || "");
-				setValue("state", data.state || "");
-				setValue("cep", cleanCep);
-
-				showToast(
-					"success",
-					"CEP Validado",
-					"Endereço preenchido automaticamente"
-				);
-			} else {
-				showToast(
-					"error",
-					"Erro ao buscar CEP",
-					"CEP não encontrado ou é inválido"
-				);
-				setError("cep", {
-					message: "CEP não encontrado ou é inválido",
-				});
-				setInvalidCep(cep);
-			}
-		} catch {
-			showToast("error", "Erro ao buscar CEP", "Erro na requisição");
+			showToast(
+				"success",
+				"CEP Validado",
+				"Endereço preenchido automaticamente"
+			);
+		} catch (error: any) {
+			showToast(
+				"error",
+				"Erro ao buscar CEP",
+				error.response.data.message
+			);
+			setError("cep", {
+				message: error.response.data.message,
+			});
+			setInvalidCep(cep);
 		} finally {
 			setIsValidatingCep(false);
 		}
@@ -192,48 +187,48 @@ export const AddressDialog: React.FC<{
 				</div>
 				<div className="grid">
 					<div className="lg:col-6 col-12">
-					<FormInput
-						control={control}
-						name="number"
-						label="Número *"
-						placeholder="123"
-						type="number"
-						minValue={1}
-						maxLength={3}
-						rules={{ required: "Número é obrigatório" }}
-					/>
-				</div>
-				<div className="lg:col-6 col-12">
-				<FormInput
-					control={control}
-					name="complement"
-					label="Complemento"
-					placeholder="Apto, bloco..."
-				/>
-				</div>
+						<FormInput
+							control={control}
+							name="number"
+							label="Número *"
+							placeholder="123"
+							type="number"
+							minValue={1}
+							maxLength={3}
+							rules={{ required: "Número é obrigatório" }}
+						/>
+					</div>
+					<div className="lg:col-6 col-12">
+						<FormInput
+							control={control}
+							name="complement"
+							label="Complemento"
+							placeholder="Apto, bloco..."
+						/>
+					</div>
 				</div>
 
 				<div className="grid">
-				<div className="lg:col-7 col-12">
-				<FormInput
-					control={control}
-					name="street"
-					label="Rua *"
-					placeholder="Av. Brasil"
-					disabled
-					rules={{ required: "Rua é obrigatória" }}
-				/>
-				</div>
-				<div className="lg:col-5 col-12">
-				<FormInput
-					control={control}
-					name="neighborhood"
-					label="Bairro *"
-					placeholder="Centro"
-					disabled
-					rules={{ required: "Bairro é obrigatório" }}
-				/>
-				</div>
+					<div className="lg:col-7 col-12">
+						<FormInput
+							control={control}
+							name="street"
+							label="Rua *"
+							placeholder="Av. Brasil"
+							disabled
+							rules={{ required: "Rua é obrigatória" }}
+						/>
+					</div>
+					<div className="lg:col-5 col-12">
+						<FormInput
+							control={control}
+							name="neighborhood"
+							label="Bairro *"
+							placeholder="Centro"
+							disabled
+							rules={{ required: "Bairro é obrigatório" }}
+						/>
+					</div>
 				</div>
 
 				<FormInput
@@ -267,7 +262,11 @@ export const AddressDialog: React.FC<{
 						label={buttonLabel}
 						type="submit"
 						loading={savingAddress}
-						disabled={savingAddress || !formState.isValid || isEditing && !formState.isDirty}
+						disabled={
+							savingAddress ||
+							!formState.isValid ||
+							(isEditing && !formState.isDirty)
+						}
 					/>
 				</div>
 			</form>
