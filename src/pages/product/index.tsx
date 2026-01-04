@@ -5,7 +5,7 @@ import type { IProduct } from "@/commons/types/types";
 import { ProductDescription } from "@/components/Product/ProductDescription";
 import { ContainerProductInformations } from "@/components/Product/ContainerProductInformations";
 import { ContainerProductImage } from "@/components/Product/ContainerProductImage";
-import { getProductById } from "@/services/product-service";
+import { getProductById } from "@/services/product.service";
 
 const ProductPage = () => {
 	const params = useParams();

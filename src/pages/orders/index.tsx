@@ -4,7 +4,7 @@ import { OrdersNotFound } from "@/components/Order/OrdersNotFound";
 import type React from "react";
 import { useEffect, useState } from "react";
 import "./orders-page.style.css";
-import { getOrders } from "@/services/order-service";
+import { getOrders } from "@/services/order.service";
 
 const OrdersPage: React.FC = () => {
 	const [orders, setOrders] = useState<IOrderResponse[]>([]);

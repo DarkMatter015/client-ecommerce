@@ -5,7 +5,7 @@ import type { ICategory, IProduct } from "@/commons/types/types";
 
 import "./home-products.style.css";
 import { CategoryDropdown } from "@/components/Category/CategoryDropdown";
-import { getProductsFiltered } from "@/services/product-service";
+import { getProductsFiltered } from "@/services/product.service";
 
 export const HomeProducts: React.FC = () => {
 	const [products, setProducts] = useState<IProduct[]>([]);

@@ -3,7 +3,7 @@ import { AuthFooter } from "@/components/Auth/AuthFooter";
 import { FormPasswordInput } from "@/components/Form/FormPasswordInput";
 import { PasswordFooter } from "@/components/Form/PasswordFooter";
 import { useToast } from "@/context/hooks/use-toast";
-import { resetPassword } from "@/services/auth-service";
+import { resetPassword } from "@/services/auth.service";
 import { VALIDATION_RULES } from "@/utils/FormUtils";
 import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";

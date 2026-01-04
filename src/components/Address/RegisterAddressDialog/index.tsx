@@ -1,6 +1,6 @@
 import type { IAddress } from "@/commons/types/types";
 import { useToast } from "@/context/hooks/use-toast";
-import { validateCep } from "@/services/cep-service";
+import { validateCep } from "@/services/cep.service";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import type React from "react";

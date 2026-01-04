@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Paginator, type PaginatorPageChangeEvent } from "primereact/paginator";
 import "./category-dropdown.style.css";
-import { getCategoriesFiltered } from "@/services/category-service";
+import { getCategoriesFiltered } from "@/services/category.service";
 
 interface CategoryDropdownProps {
 	value: ICategory | null;

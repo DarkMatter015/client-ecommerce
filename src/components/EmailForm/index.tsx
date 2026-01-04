@@ -7,7 +7,7 @@ import { VALIDATION_RULES } from "@/utils/FormUtils";
 import { useForm } from "react-hook-form";
 import { FormInput } from "../Form/FormInput";
 import "./email-form.style.css";
-import { createAlert } from "@/services/alerts-service";
+import { createAlert } from "@/services/alerts.service";
 import { useAuth } from "@/context/hooks/use-auth";
 import { useEffect } from "react";
 import { QuantityTagProduct } from "../Product/QuantityTagProduct";

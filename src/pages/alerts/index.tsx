@@ -1,57 +1,54 @@
-import { AddressManagementTable } from "@/components/Address/AddressManagementTable";
+import { AlertsList } from "@/components/Alerts/AlertsList";
 import { useToast } from "@/context/hooks/use-toast";
 import { Paginator } from "primereact/paginator";
 import { useEffect, useState } from "react";
-import type { IAddress } from "@/commons/types/types";
-import { getAddresses } from "@/services/address.service";
+import type { IAlertResponse } from "@/commons/types/types";
+import { getAlerts } from "@/services/alerts.service";
+import "./alerts.style.css";
 
-export const AddressesPage = () => {
+const AlertsPage = () => {
 	const { showToast } = useToast();
 	const [first, setFirst] = useState(0);
 	const [rows, setRows] = useState(10);
 	const [loading, setLoading] = useState(false);
 
-	const [addresses, setAddresses] = useState<IAddress[]>([]);
+	const [alerts, setAlerts] = useState<IAlertResponse[]>([]);
 	const [totalElements, setTotalElements] = useState(0);
 
-	const fetchAddresses = async (pageIndex: number, pageSize: number) => {
+	const fetchAlerts = async (pageIndex: number, pageSize: number) => {
 		setLoading(true);
 		try {
-			const response = await getAddresses(pageIndex, pageSize);
+			const response = await getAlerts(pageIndex, pageSize);
 			if (response) {
-				setAddresses(response.content);
+				setAlerts(response.content);
 				setTotalElements(response.totalElements);
 			}
 		} catch (error) {
-			console.error("Erro ao buscar endereços:", error);
-			showToast(
-				"error",
-				"Erro",
-				"Não foi possível carregar os endereços."
-			);
+			console.error("Erro ao buscar alertas:", error);
+			showToast("error", "Erro", "Não foi possível carregar os alertas.");
 		} finally {
 			setLoading(false);
 		}
 	};
 
 	const changePage = (e: any) => {
-		if (totalElements < e.rows) return;
+		if (e.rows > rows && totalElements <= rows) return;
 		setFirst(e.first);
 		setRows(e.rows);
 	};
 
 	useEffect(() => {
-		fetchAddresses(first / rows, rows);
+		fetchAlerts(first / rows, rows);
 	}, [first, rows]);
 
 	return (
-		<div className="p-4">
-			<h1>Endereços</h1>
+		<div className="p-4 alerts-page-container">
+			<h1>Alertas</h1>
 
-			<AddressManagementTable
-				addresses={addresses}
+			<AlertsList
+				alerts={alerts}
 				loading={loading}
-				onRefresh={() => fetchAddresses(first / rows, rows)}
+				onRefresh={() => fetchAlerts(first / rows, rows)}
 			/>
 
 			<Paginator
@@ -65,3 +62,5 @@ export const AddressesPage = () => {
 		</div>
 	);
 };
+
+export default AlertsPage;

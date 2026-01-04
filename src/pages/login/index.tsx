@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import "./login.style.css";
 
 import { useAuth } from "@/context/hooks/use-auth";
-import { login } from "@/services/auth-service";
+import { login } from "@/services/auth.service";
 import { VALIDATION_RULES, createValidationRules } from "@/utils/FormUtils.ts";
 
 import "@/styles/form.css";

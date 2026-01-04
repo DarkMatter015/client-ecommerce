@@ -48,14 +48,19 @@ export const useMenuItems = () => {
                   command: () => navigate("/perfil"),
               },
               {
-                  label: "Meus Pedidos",
+                  label: "Pedidos",
                   icon: "pi pi-box",
                   command: () => navigate("/pedidos"),
               },
               {
-                  label: "Meus Endereços",
+                  label: "Endereços",
                   icon: "pi pi-map-marker",
                   command: () => navigate("/enderecos"),
+              },
+              {
+                  label: "Alertas",
+                  icon: "pi pi-bell",
+                  command: () => navigate("/alertas"),
               },
               {
                   label: "Sair",

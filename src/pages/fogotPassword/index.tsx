@@ -3,7 +3,7 @@ import { EmailRecoveryPasswordForm } from "@/components/ForgotPassword/EmailReco
 import { ResetPasswordForm } from "@/components/ForgotPassword/ResetPasswordForm";
 import { useToast } from "@/context/hooks/use-toast";
 import { AuthLayout } from "@/layouts/AuthLayout";
-import { validateResetToken } from "@/services/auth-service";
+import { validateResetToken } from "@/services/auth.service";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 

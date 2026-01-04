@@ -1,0 +1,38 @@
+.switch-button {
+	border-radius: 30px !important;
+	height: fit-content;
+	width: fit-content;
+	padding: 0;
+}
+
+
+.switch-button.p-button {
+	font-size: 0.95rem !important;
+	font-weight: 600 !important;
+	border: none !important;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1) !important;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	background-color: var(--switch-bg-color) !important;
+	color: #fff !important;
+	height: fit-content;
+	width: fit-content;
+	padding: 0.5rem;
+}
+
+
+.switch-button:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+	filter: brightness(1.05) !important;
+	border-radius: 30px !important;
+}
+
+.switch-button.active {
+	--switch-bg-color: var(--green) !important;
+}
+
+.switch-button.inactive {
+	color: rgb(85, 85, 85) !important;
+}

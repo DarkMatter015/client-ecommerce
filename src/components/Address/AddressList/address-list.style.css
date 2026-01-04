@@ -15,7 +15,8 @@
 	margin: 0;
 }
 
-.address-item {
+.address-item,
+.no-active-address {
 	display: flex;
 	align-items: flex-start;
 	padding: 1rem;
@@ -26,6 +27,10 @@
 	cursor: pointer;
 	transition: all 0.3s ease;
 	position: relative;
+}
+
+.no-active-address {
+	cursor: auto;
 }
 
 .address-item:hover,

@@ -12,6 +12,7 @@ import Profile from "@/pages/profile";
 import { NotFoundPage } from "@/pages/notFound";
 import { ForgotPasswordPage } from "@/pages/fogotPassword";
 import { AddressesPage } from "@/pages/addresses";
+import AlertsPage from "@/pages/alerts";
 
 export function AppRoutes() {
 	return (
@@ -37,6 +38,7 @@ export function AppRoutes() {
 					<Route path="/pedidos" element={<OrdersPage />} />
 					<Route path="/perfil" element={<Profile />} />
 					<Route path="/enderecos" element={<AddressesPage />} />
+					<Route path="/alertas" element={<AlertsPage />} />
 				</Route>
 			</Route>
 		</Routes>

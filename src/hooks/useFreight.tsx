@@ -2,7 +2,7 @@ import type { IFreightResponse, IItem } from "@/commons/types/types";
 import { useState } from "react";
 import { useCallback } from "react";
 import type { IFreightRequest } from "@/commons/types/types";
-import { calculateFreightByProducts } from "@/services/freight-service";
+import { calculateFreightByProducts } from "@/services/freight.service";
 import { useToast } from "@/context/hooks/use-toast";
 
 export function useFreight(cep: string, produtos: IItem[]) {

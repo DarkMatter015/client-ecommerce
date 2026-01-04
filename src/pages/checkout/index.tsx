@@ -14,9 +14,9 @@ import { AddressDialog } from "@/components/Address/RegisterAddressDialog";
 import { AddressList } from "@/components/Address/AddressList";
 import { OrderConfirmation } from "@/components/Checkout/OrderConfirmation";
 import { CalcFreight } from "@/components/Freight/CalcFreight";
-import { getPayments } from "@/services/payment-service";
-import { createAddress, getAddresses } from "@/services/address-service";
-import { createOrder } from "@/services/order-service";
+import { getPayments } from "@/services/payment.service";
+import { createAddress, getAddresses } from "@/services/address.service";
+import { createOrder } from "@/services/order.service";
 
 const CheckoutPage: React.FC = () => {
 	const { cartItems, freight, cleanCart } = useCart();
@@ -61,7 +61,11 @@ const CheckoutPage: React.FC = () => {
 				}
 			} catch (err) {
 				console.error("Erro ao buscar pagamentos:", err);
-				showToast("error", "Erro ao buscar pagamentos", "Tente novamente mais tarde.");
+				showToast(
+					"error",
+					"Erro ao buscar pagamentos",
+					"Tente novamente mais tarde."
+				);
 			}
 		};
 
@@ -73,7 +77,11 @@ const CheckoutPage: React.FC = () => {
 				}
 			} catch (err) {
 				console.error("Erro ao buscar endereços:", err);
-				showToast("error", "Erro ao buscar endereços", "Tente novamente mais tarde.");
+				showToast(
+					"error",
+					"Erro ao buscar endereços",
+					"Tente novamente mais tarde."
+				);
 			}
 		};
 
