@@ -113,3 +113,7 @@ i.pi-spin {
 .pi.pi-spin.pi-spinner {
     animation: spin 1s linear infinite !important;
 }
+
+.pi.pi-spin.pi-spinner.no-spin {
+    animation: none !important;
+}

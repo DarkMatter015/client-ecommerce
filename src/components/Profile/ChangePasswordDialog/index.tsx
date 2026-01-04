@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { useForm } from "react-hook-form";
 import type { IChangePassword } from "@/commons/types/types";
-import { changePassword } from "@/services/auth-service";
+import { changePassword } from "@/services/auth.service";
 import { useToast } from "@/context/hooks/use-toast";
 import { FormPasswordInput } from "@/components/Form/FormPasswordInput";
 import { PasswordFooter } from "@/components/Form/PasswordFooter";

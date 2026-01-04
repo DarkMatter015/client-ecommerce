@@ -24,6 +24,13 @@ const Profile = () => {
 						icon="pi-shopping-bag"
 						link="/pedidos"
 					/>
+
+					<InfoCard
+						title="Alertas"
+						description="Acompanhe os alertas de produtos que você tem cadastrado"
+						icon="pi-bell"
+						link="/alertas"
+					/>
 				</Card>
 			</div>
 		</div>

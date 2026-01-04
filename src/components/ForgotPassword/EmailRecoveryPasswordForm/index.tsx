@@ -2,7 +2,7 @@ import type { IForgotPassword } from "@/commons/types/types";
 import { AuthFooter } from "@/components/Auth/AuthFooter";
 import { FormInput } from "@/components/Form/FormInput";
 import { useToast } from "@/context/hooks/use-toast";
-import { forgotPassword } from "@/services/auth-service";
+import { forgotPassword } from "@/services/auth.service";
 import { VALIDATION_RULES } from "@/utils/FormUtils";
 import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";

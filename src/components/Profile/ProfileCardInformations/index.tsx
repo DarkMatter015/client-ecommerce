@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/context/hooks/use-toast";
 import { useAuth } from "@/context/hooks/use-auth";
 import type { IUserUpdate } from "@/commons/types/types";
-import { updateProfile } from "@/services/auth-service";
+import { updateProfile } from "@/services/auth.service";
 import { useForm, Controller } from "react-hook-form";
 import { createValidationRules } from "@/utils/FormUtils";
 import { classNames } from "primereact/utils";

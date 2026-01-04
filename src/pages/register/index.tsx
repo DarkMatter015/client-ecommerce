@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 
 import type { IUserRegister } from "@/commons/types/types";
-import { signup } from "@/services/auth-service";
+import { signup } from "@/services/auth.service";
 
 import "@/styles/form.css";
 import { useToast } from "@/context/hooks/use-toast";

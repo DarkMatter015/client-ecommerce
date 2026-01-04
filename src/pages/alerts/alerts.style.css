@@ -1,0 +1,14 @@
+.alerts-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.alerts-container {
+  margin-top: 1rem;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
