@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import { Tag } from "primereact/tag";
 import { SwitchButton } from "@/components/Buttons/SwitchButton";
-import { AlertStatus, type IAlertResponse } from "@/commons/types/types";
+import { type IAlertResponse } from "@/commons/types/types";
 import "./card-alert.style.css";
 
 interface CardAlertProps {
@@ -20,8 +20,8 @@ export const CardAlert = ({
 	const isActive =
 		alert.status === "PENDING" || alert.status === "PROCESSING";
 	const isActivable =
-		alert.status === AlertStatus.CANCELLED ||
-		alert.status === AlertStatus.PENDING;
+		alert.status === "CANCELLED" ||
+		alert.status === "PENDING";
 
 	const onSwitchChecked = (id: number) => {
 		if (isActive) {

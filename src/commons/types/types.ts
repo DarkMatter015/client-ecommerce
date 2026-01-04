@@ -183,13 +183,5 @@ export interface IAlertResponse {
     productName: string;
     requestDate: string;
     processedAt: string;
-    status: AlertStatus;
-}
-
-export enum AlertStatus {
-    PENDING = "PENDING",
-    PROCESSING = "PROCESSING",
-    CANCELLED = "CANCELLED",
-    SENT = "SENT",
-    FAILED = "FAILED"
+    status: string;
 }

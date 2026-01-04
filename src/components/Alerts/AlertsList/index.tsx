@@ -1,4 +1,4 @@
-import { AlertStatus, type IAlertResponse } from "@/commons/types/types";
+import { type IAlertResponse } from "@/commons/types/types";
 import { DataView } from "primereact/dataview";
 import React, { useMemo } from "react";
 import "./alerts-list.style.css";
@@ -72,11 +72,11 @@ export const AlertsList: React.FC<AlertsListProps> = ({
 
 	const sortedAlerts = useMemo(() => {
 		const priority: Record<string, number> = {
-			[AlertStatus.FAILED]: 1,
-			[AlertStatus.PENDING]: 2,
-			[AlertStatus.PROCESSING]: 3,
-			[AlertStatus.SENT]: 4,
-			[AlertStatus.CANCELLED]: 5,
+			["FAILED"]: 1,
+			["PENDING"]: 2,
+			["PROCESSING"]: 3,
+			["SENT"]: 4,
+			["CANCELLED"]: 5,
 		};
 
 		return [...alerts].sort((a, b) => {
