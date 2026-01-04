@@ -1,0 +1,29 @@
+.switch-button {
+	border-radius: 30px !important;
+	font-size: 0.95rem !important;
+	font-weight: 600 !important;
+	border: none !important;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1) !important;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+    background-color: var(--switch-bg-color) !important;
+    color: #fff !important;
+}
+
+.switch-button:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.switch-button:hover {
+	filter: brightness(1.1);
+}
+
+.switch-button.active {
+	--switch-bg-color: var(--green) !important;
+}
+
+.switch-button.inactive {
+    color: rgb(85, 85, 85) !important;
+}

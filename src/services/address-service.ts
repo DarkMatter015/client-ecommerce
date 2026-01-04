@@ -61,5 +61,5 @@ export const activateAddress = async (id: number): Promise<IAddress> => {
 };
 
 export const inactivateAddress = async (id: number): Promise<void> => {
-	await api.post(`${ROUTE}/inactivate/${id}`);
+	await api.delete(`${ROUTE}/inactivate/${id}`);
 };

@@ -12,6 +12,7 @@ import {
 	deleteAddress,
 	createAddress,
 	updateAddress,
+	inactivateAddress,
 } from "@/services/address-service";
 
 interface AddressManagementTableProps {
@@ -66,21 +67,23 @@ export const AddressManagementTable: React.FC<AddressManagementTableProps> = ({
 		try {
 			action === "deletar"
 				? await deleteAddress(id)
-				: await activateAddress(id);
+				: action === "ativar"
+					? await activateAddress(id)
+					: await inactivateAddress(id);
 			onRefresh();
 			setTimeout(() => {
 				showToast(
 					"success",
 					"Sucesso",
 					`Endereço ${
-						action === "deletar" ? "excluído" : "ativado"
+						action === "deletar" ? "excluído" : action === "ativar" ? "ativado" : "inativado"
 					} com sucesso.`
 				);
 			}, 500);
 		} catch (error) {
 			console.error(
 				`Erro ao ${
-					action === "deletar" ? "excluir" : "ativar"
+					action === "deletar" ? "excluir" : action === "ativar" ? "ativar" : "inativar"
 				} endereço:`,
 				error
 			);
@@ -88,7 +91,7 @@ export const AddressManagementTable: React.FC<AddressManagementTableProps> = ({
 				"error",
 				"Erro",
 				`Falha ao ${
-					action === "deletar" ? "excluir" : "ativar"
+					action === "deletar" ? "excluir" : action === "ativar" ? "ativar" : "inativar"
 				} o endereço.`
 			);
 		}
@@ -153,6 +156,9 @@ export const AddressManagementTable: React.FC<AddressManagementTableProps> = ({
 							}
 							onActive={() =>
 								handleShowConfirm(item.id, "ativar")
+							}
+							onInactivate={() =>
+								handleShowConfirm(item.id, "inativar")
 							}
 						/>
 					)}
