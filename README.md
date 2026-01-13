@@ -1,160 +1,161 @@
-# RiffHouse Client — E-commerce com React + Vite
+# 🎸 RiffHouse Client — AI-Powered E-commerce
 
-Este é o repositório do **front-end** da RiffHouse, uma plataforma de e-commerce de instrumentos musicais. Desenvolvido com **React, TypeScript e Vite**, este projeto consome a [API REST RiffHouse](https://github.com/DarkMatter015/server-ecommerce) para fornecer uma experiência de compra completa e interativa.
+<div align="center">
 
----
+![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-Build_Tool-purple?style=for-the-badge&logo=vite&logoColor=white)
+![PrimeReact](https://img.shields.io/badge/PrimeReact-UI_Kit-blueviolet?style=for-the-badge&logo=primereact&logoColor=white)
 
-## 🎥 Demonstração do Projeto
+![Axios](https://img.shields.io/badge/Axios-Http_Client-yellow?style=for-the-badge&logo=axios&logoColor=black)
+![Context API](https://img.shields.io/badge/Context_API-State_Management-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![React Router](https://img.shields.io/badge/React_Router-Navigation-red?style=for-the-badge&logo=reactrouter&logoColor=white)
 
-[![Assista à demonstração no YouTube](https://img.youtube.com/vi/NLZSjH3SSTU/0.jpg)](https://youtu.be/NLZSjH3SSTU)
+</div>
 
----
+## 📖 Sobre o Projeto
 
-## 🚀 Tecnologias Utilizadas
+**RiffHouse Client** é o front-end moderno e responsivo da plataforma de e-commerce RiffHouse. Desenvolvido com **React 19**, **TypeScript** e **Vite**, o projeto oferece uma SPA (Single Page Application) de alta performance focada na experiência do usuário.
 
-![React](https://img.shields.io/badge/React-19-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Vite](https://img.shields.io/badge/Vite-4-purple)
-![Axios](https://img.shields.io/badge/Axios-1-yellow)
-![React Router](https://img.shields.io/badge/React_Router-6-red)
+Além das funcionalidades tradicionais de e-commerce, este projeto se diferencia pela integração nativa com um **Agente de IA e RAG (Retrieval-Augmented Generation)**, transformando a navegação em uma experiência de compra assistida e personalizada.
 
-- **React 19**
-- **TypeScript** - Javascript tipado para validação de dados.
-- **Vite** - Construção de Build do projeto.
-- **Prime React** - Componentes de interface de usuário (UI).
-- **Prime Icons** - Biblioteca com conjunto de ícones.
-- **Prime Flex** - CSS responsivo.
-- **React Hook Form** - Gerenciamento dos formulários da aplicação.
-- **React Router Dom** - Biblioteca para gerenciamento de rotas.
-- **Axios** - Biblioteca para requisições HTTP.
-- **Context API** - para gerenciamento de estado (autenticação e carrinho).
+> **🌐 Back-end:** Este projeto consome a [RiffHouse API](https://github.com/DarkMatter015/server-ecommerce).
+>
+>  **🎥 Serviço de AI:** O projeto utiliza o agente de IA [Service AI](https://github.com/DarkMatter015/ia-service-ecommerce)
 
 ---
 
-## ⚙️ Funcionalidades
+## 🤖 Destaque: Intelligent Shopping Agent
+A grande inovação da RiffHouse é o seu **Assistente Virtual Integrado**, projetado não apenas para suporte, mas para **conversão de vendas**.
 
-✅ **Navegação e Visualização de Produtos:**
-  - Página inicial com produtos em destaque.
-  - Página de detalhes do produto com descrição, imagens e preço.
-  - Listagem e pesquisa de produtos.
+### 🧠 Capacidades do Agente
+1.  **RAG Especializado (Busca Semântica):** O chat utiliza RAG para consultar a base de dados de produtos em tempo real. O usuário pode perguntar *"Qual a melhor guitarra para tocar metal iniciante?"* e o agente analisará as especificações técnicas do catálogo para recomendar o produto ideal.
+2.  **Contexto Autenticado:** Quando o usuário está logado, o agente reconhece sua identidade, permitindo consultas sobre:
+    * Status detalhado de pedidos recentes.
+    * Histórico de alertas de estoque.
+3.  **Persuasão Ética:** O prompt do sistema foi desenhado para atuar como um vendedor especialista, ajudando a quebrar objeções de compra e destacar os benefícios dos instrumentos.
 
-✅ **Carrinho de Compras:**
-  - Adicionar e remover produtos do carrinho.
-  - Visualização do resumo do carrinho.
+---
 
-✅ **Autenticação de Usuários:**
-  - Cadastro e login de usuários.
-  - Rotas protegidas que exigem autenticação.
-  - Gerenciamento de sessão com Context API.
+## 🏗️ Arquitetura e Decisões Técnicas
 
-✅ **Checkout e Pedidos:**
-  - Finalização de compra com seleção de endereço e método de pagamento.
-  - Visualização do histórico de pedidos do usuário.
+O front-end foi construído visando manutenibilidade, tipagem estrita e separação de responsabilidades.
+
+### 📐 Destaques Arquiteturais
+* **Context API para Gestão de Estado:** Optou-se por não utilizar Redux/Zustand para manter a arquitetura leve. O estado global é segmentado em Contextos específicos (`AuthContext`, `CartContext`), suficientes para a complexidade atual da aplicação.
+* **Camada de Serviço (Service Layer Pattern):** Toda a comunicação com a API (Axios) é isolada em serviços (`/services`). Os componentes de UI desconhecem as URLs ou a lógica HTTP, recebendo apenas dados tipados.
+* **Custom Hooks:** Lógica repetitiva (como verificação de autenticação ou manipulação de formulários complexos) foi abstraída em hooks (`useAuth`, `useCart` etc.), mantendo os componentes visuais limpos.
+* **Interceptor de Autenticação:** O Axios foi configurado com interceptors para anexar automaticamente o Token JWT em requisições protegidas e tratar expiração de sessão globalmente.
+
+### 🛠️ Tecnologias Principais
+* **Core:** React 19 + TypeScript.
+* **Build & Tooling:** Vite.
+* **UI/UX:** PrimeReact (Componentes) + PrimeFlex (Layout System).
+* **Forms:** React Hook Form (Gerenciamento de formulários performático).
+* **Integração:** Axios.
+
+---
+
+## 🚀 Funcionalidades
+
+### 🛒 Jornada de Compra
+* **Catálogo Dinâmico:** Listagem, filtros e busca de instrumentos.
+* **Carrinho Persistente:** Adição/remoção de itens e resumo financeiro em tempo real.
+* **Checkout Inteligente:** Integração com APIs externas para **validação automática de endereço via CEP** e **cálculo de frete** em tempo real antes da finalização.
+  
+### 👤 Identidade e Segurança
+* **Autenticação JWT:** Login seguro e rotas protegidas (`RequireAuth`).
+* **Recuperação de Acesso:** Fluxo de "Esqueci minha senha" com envio de código via e-mail.
+* **Gestão de Credenciais:** Troca de senha e edição de dados cadastrais.
+
+### 📦 Painel do Usuário
+* **Meus Pedidos:** Acompanhamento de status e histórico detalhado de compras.
+* **Gestão de Endereços:** CRUD completo com implementação de **Soft Delete** (endereços antigos usados em pedidos não somem, apenas são arquivados).
+* **Alertas de Estoque:** Usuários podem gerenciar seus alertas. Quando um produto volta ao estoque, o sistema dispara notificações automáticas.
 
 ---
 
 ## 📁 Estrutura do Projeto
-```
-/public
-│-- /assets
-    │-- /images
-/src
-│-- /commons
-    │-- /types
-│-- /components
-│-- /context
-    │-- /hooks
-│-- /lib
-│-- /pages
-│-- /routes
-│-- /services
-│-- /styles
-│-- /utils
-│-- App.tsx
-│-- main.tsx
-```
 
-📌 **Resumo:**
-- `/assets/images` → Imagens públicas do projeto.
-- `/commons/types` → Interfaces de tipos comuns (IResponse, IProduct, etc).
-- `components/` → Componentes reutilizáveis (cards, listas, sessões etc.).
-- `context/` → Gerenciamento de estado global com Context API (AuthContext, CartContext).
-- `hooks/` → Hooks customizados (ex: `useAuth`).
-- `lib/` → Configuração de instâncias, como o Axios.
-- `pages/` → Páginas principais da aplicação (Home, Login, Cart, etc.).
-- `routes/` → Configuração das rotas da aplicação.
-- `services/` → Funções para interagir com a API backend.
-- `styles/` → Estilização compartilhada (Login e Register).
-- `utils/` → Funções utilitárias.
+A organização de pastas favorece a escalabilidade modular:
 
----
-
-## ⚡ Como Executar Localmente
-
-### 1️⃣ Clone o repositório:
 ```bash
-git clone https://github.com/DarkMatter015/client-ecommerce.git
-cd client-ecommerce
+  /src
+  │-- /commons       # Tipos TypeScript compartilhados (Interfaces)
+  │-- /components    # Componentes reutilizáveis e específicos (Cards, Buttons etc...)
+  │-- /context       # Estado Global (Auth, Cart, Toast)
+  │-- /hooks         # Lógica encapsulada (useFreight, useProduct)
+  │-- /lib           # Configurações de libs de terceiros (Axios instance)
+  │-- /pages         # Views principais (Home, Checkout, Profile)
+  │-- /routes        # Definição de rotas e Guardas de Rota
+  │-- /services      # Chamadas HTTP para a API Java
+  │-- /styles        # CSS Modules e temas globais
 ```
 
-### 2️⃣ Instale as dependências:
+---
+
+## ⚡ Como Rodar o Projeto
+
+### Pré-requisitos
+* **Node.js** (v18+)
+* **RiffHouse API** rodando localmente ou em ambiente de homologação.
+* **RiffHouse AI** rodando localmente ou em ambiente de homologação.
+
+### Passo a Passo
+1. Clone o repositório
+
 ```bash
-npm install
+  git clone https://github.com/DarkMatter015/client-ecommerce.git
+  cd client-ecommerce
 ```
 
-### 3️⃣ Execute o projeto:
+2. Instale as dependências
+   
+ ```bash
+  npm install
+```
+
+3. Configure as Variáveis de Ambiente Crie um arquivo .env na raiz (baseado no .env.example) apontando para sua API:
+
+ ```bash
+  ## localhost:8080
+  VITE_API_URL=https://riffhouse-api.onrender.com
+  ## localhost:8000
+  VITE_API_CHAT_URL=https://riffhouse-chat.onrender.com
+```
+
+4. Execute em modo de desenvolvimento
+
 ```bash
-npm run dev
+  npm run dev
 ```
 
-### 4️⃣ Acesse:
-👉 `http://localhost:5173/` (ou a porta indicada no terminal)
-
----
-
-## 🔗 Integração com o Back-end
-
-Este projeto foi projetado para consumir a **API RiffHouse**, desenvolvida em Java com Spring Boot. Certifique-se de que o servidor do back-end esteja em execução para que todas as funcionalidades operem corretamente.
-
-📦 **Repositório do back-end:** [RiffHouse API (Java/Spring)](https://github.com/DarkMatter015/server-ecommerce)
-
----
-
-## 🧠 Aprendizados e Desafios Técnicos
-
-Durante o desenvolvimento deste projeto, pude consolidar e aprofundar meus conhecimentos em **desenvolvimento de aplicações web com React e TypeScript**, além de compreender melhor o ciclo completo de uma aplicação **Single Page Application (SPA)**.
-
-### 🔍 Principais aprendizados
-- **Arquitetura baseada em componentes com React**: Construção de componentes reutilizáveis como `CardProduct`, `CartSummary` e `TopMenu`, promovendo um desenvolvimento modular e escalável.
-- **Gerenciamento de estado com React Context**: Utilização do `AuthContext` e `CartContext` para gerenciar o estado global da aplicação, como autenticação de usuário e itens no carrinho de compras.
-- **Roteamento do lado do cliente com React Router**: Definição de rotas da aplicação em `src/routes/app-routes`, incluindo a implementação de rotas protegidas com o componente `RequireAuth`.
-- **Consumo de APIs REST com Axios**: Integração com o back-end através de serviços (`src/services`) que utilizam o Axios para realizar requisições HTTP, com uma instância configurada em `src/lib/axios.ts`.
-- **Uso de TypeScript para tipagem estática**: Adoção do TypeScript em todo o projeto para garantir a segurança de tipos, resultando em um código mais robusto e com menos erros em tempo de execução.
-- **Estilização com CSS Modules**: Organização dos estilos de forma componentizada, evitando conflitos de nomes e garantindo que os estilos de um componente não afetem outros.
-- **Setup de projeto moderno com Vite**: Utilização do Vite para um ambiente de desenvolvimento rápido e um processo de build otimizado.
-
-### ⚙️ Desafios técnicos enfrentados
-- **Gerenciamento de estado complexo**: Lidar com o estado do carrinho de compras (adicionar, remover, atualizar itens) e o estado de autenticação do usuário de forma consistente.
-- **Implementação de rotas protegidas**: Criar um mecanismo (`RequireAuth`) para proteger rotas que exigem que o usuário esteja autenticado, redirecionando para a página de login caso contrário.
-- **Tratamento de operações assíncronas**: Lidar com estados de carregamento (loading) e erros ao buscar dados da API, proporcionando um feedback claro para o usuário.
-- **Composição de componentes e passagem de props**: Decidir a melhor forma de estruturar os componentes e como eles devem se comunicar, utilizando `props` e `context` de forma eficiente.
-- **Estilização e responsividade**: Garantir que a aplicação tenha uma boa aparência e seja funcional em diferentes tamanhos de tela.
-
----
-
-## 💡 Melhorias Planejadas
-
-- 🔸 Validação de CEP e calculo de frete
-- 🔸 Cálculo de frete baseado no endereço
-- 🔸 Implementar **refresh token JWT**
-- 🔸 Testes unitários e de integração (React Testing Library + Vitest)
-- 🔸 Adicionar **Dockerfile** e `docker-compose.yml` para o front-end
-- 🔸 Deploy do front-end em **Vercel** ou **Netlify**
+👉 **Acesse:** http://localhost:5173/
 
 ---
 
 ## 👨‍💻 Autor
 
-**Lucas Matheus de Camargo**  
-📎 [LinkedIn](https://www.linkedin.com/in/lucas-matheus-de-camargo-49a315236/)  
-💼 Buscando oportunidades como **Desenvolvedor Java/Fullstack Júnior** e **QA Júnior**
+<table style="border: none;">
+  <tr>
+    <td width="100px" align="center">
+      <img src="https://github.com/DarkMatter015.png" width="100px" style="border-radius: 50%;" alt="Avatar do Lucas"/>
+    </td>
+    <td style="padding-left: 15px;">
+      <strong>Lucas Matheus de Camargo</strong><br>
+      <i>Desenvolvedor Full Stack | QA</i><br>
+      <br>
+      <a href="https://www.linkedin.com/in/lucas-matheus-de-camargo-49a315236/" target="_blank">
+        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn Badge">
+      </a>
+      <a href="https://github.com/DarkMatter015" target="_blank">
+        <img src="https://img.shields.io/badge/GitHub-100000?style=flat&logo=github&logoColor=white" alt="GitHub Badge">
+      </a>
+    </td>
+  </tr>
+</table>
+
+
+---
+
+<div align="center"> <sub>Feito com ⚛️ e React por Lucas Matheus.</sub> </div>
