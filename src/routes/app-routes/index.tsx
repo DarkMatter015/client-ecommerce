@@ -29,8 +29,8 @@ export function AppRoutes() {
 				<Route path="/produto/:id" element={<ProductPage />} />
 
 				<Route path="/carrinho" element={<CartPage />} />
-				
-        <Route path="*" element={<NotFoundPage />} />
+
+				<Route path="*" element={<NotFoundPage />} />
 
 				{/* protected routes */}
 				<Route element={<RequireAuth />}>

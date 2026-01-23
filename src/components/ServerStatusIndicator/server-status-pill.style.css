@@ -1,0 +1,134 @@
+/* --- Estilos Base (Desktop) --- */
+.status-pill-container {
+	position: fixed;
+	bottom: 24px;
+	left: 24px;
+	z-index: 9999;
+
+	display: flex;
+	align-items: center;
+	gap: 12px; /* Espaço entre icone e texto */
+
+	padding: 10px 20px;
+	border-radius: 50px;
+
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+	animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Tipografia e Ícones */
+.status-content {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.status-text {
+	font-family:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	color: #374151;
+	font-size: 0.875rem;
+	font-weight: 500;
+	white-space: nowrap; /* Impede quebra de linha */
+}
+
+/* Botão de Tentar (Desktop) */
+.retry-btn {
+	margin-left: 4px;
+	padding: 4px 10px;
+	background: #f3f4f6;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.75rem;
+	font-weight: bold;
+	color: #374151;
+	transition: background 0.2s;
+}
+.retry-btn:hover {
+	background: #e5e7eb;
+}
+
+/* Variações de Cor */
+.status-pill-container.waking-up {
+	border-left: 3px solid #3b82f6;
+}
+.status-pill-container.waking-up i {
+	color: #3b82f6;
+}
+
+.status-pill-container.offline {
+	border-left: 3px solid var(--primary-color);
+	cursor: pointer; /* No mobile o container todo vira botão */
+}
+.status-pill-container.offline i {
+	color: var(--primary-color);
+}
+
+/* Animações */
+@keyframes slideUpFade {
+	from {
+		opacity: 0;
+		transform: translateY(20px) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+.spin-animation {
+	animation: spin 1s linear infinite;
+}
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 768px) {
+	.status-pill-container {
+		/* Transforma em um círculo compacto */
+		padding: 0;
+		width: 48px;
+		height: 48px;
+		border-radius: 50%; /* Bolinha perfeita */
+		justify-content: center;
+		bottom: 16px;
+		right: 16px;
+
+		/* Remove a borda esquerda colorida para usar borda total ou sombra colorida sutil */
+		border-left: none;
+	}
+
+	/* Ajuste visual para Waking Up no Mobile */
+	.status-pill-container.waking-up {
+		border: 2px solid #3b82f6; /* Borda total azul */
+	}
+
+	/* Ajuste visual para Offline no Mobile */
+	.status-pill-container.offline {
+		border: 2px solid var(--primary-color); /* Borda total laranja */
+	}
+
+	/* Esconde o texto e o botão específico */
+	.status-text,
+	.retry-btn {
+		display: none;
+	}
+
+	/* O container interno ajusta para centralizar o ícone */
+	.status-content {
+		gap: 0;
+	}
+
+	/* Aumenta um pouco o ícone no mobile para ser o foco */
+	.status-pill-container i {
+		font-size: 1.2rem !important;
+	}
+}
