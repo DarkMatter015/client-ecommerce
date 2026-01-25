@@ -6,11 +6,13 @@ import { ChatBody } from "./ChatBody";
 import { ChatForm } from "./ChatForm";
 import { ChatHeader } from "./ChatHeader";
 import "./chat-ai.style.css";
+import { useServerHealth } from "@/context/hooks/use-serverHealth";
 
 export const ChatAI = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [messages, setMessages] = useState<IMessage[]>([]);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
+	const { statusChat } = useServerHealth();
 
 	useEffect(() => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -61,12 +63,13 @@ export const ChatAI = () => {
 
 			{!isOpen && (
 				<button
-					className="riff-launcher"
 					onClick={() => setIsOpen(true)}
-					aria-label="Abrir Chat"
-					title="Chat"
+					aria-label={statusChat === "online" ? "Abrir Chat" : "Chat Offline"}
+					title={statusChat === "online" ? "Abrir Chat" : "Chat Offline"}
+					disabled={statusChat !== "online"}
+					className={statusChat === "online" ? "riff-launcher" : "riff-launcher offline"}
 				>
-					<i className="pi pi-comment"></i>
+					<i className={statusChat === "online" ? "pi pi-comment" : "pi pi-ban"}></i>
 				</button>
 			)}
 		</div>
