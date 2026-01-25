@@ -1,4 +1,4 @@
-import { healthCheck } from "@/services/health.service";
+import { healthCheckApi, healthCheckApiChat } from "@/services/health.service";
 import React, { createContext, useEffect, useState, useCallback } from "react";
 
 export type ServerStatus =
@@ -10,7 +10,9 @@ export type ServerStatus =
 
 interface ServerHealthContextData {
 	status: ServerStatus;
+	statusChat: ServerStatus;
 	runHealthCheck: () => Promise<void>;
+	runHealthCheckChat: () => Promise<void>;
 }
 
 const ServerHealthContext = createContext<ServerHealthContextData>(
@@ -23,6 +25,7 @@ export const ServerHealthProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const [status, setStatus] = useState<ServerStatus>("idle");
+	const [statusChat, setStatusChat] = useState<ServerStatus>("idle");
 
 	const runHealthCheck = useCallback(async () => {
 		setStatus("checking");
@@ -32,7 +35,7 @@ export const ServerHealthProvider: React.FC<{ children: React.ReactNode }> = ({
 		}, COLD_START_THRESHOLD);
 
 		try {
-			await healthCheck();
+			await healthCheckApi();
 			setStatus("online");
 		} catch (error) {
 			console.error("Health Check Failed:", error);
@@ -42,12 +45,36 @@ export const ServerHealthProvider: React.FC<{ children: React.ReactNode }> = ({
 		}
 	}, []);
 
+	const runHealthCheckChat = useCallback(async () => {
+		setStatusChat("checking");
+
+		const slowResponseTimer = setTimeout(() => {
+			setStatusChat((prev) => (prev === "checking" ? "waking_up" : prev));
+		}, COLD_START_THRESHOLD);
+
+		try {
+			await healthCheckApiChat();
+			setStatusChat("online");
+		} catch (error) {
+			console.error("Health Check Failed:", error);
+			setStatusChat("offline");
+		} finally {
+			clearTimeout(slowResponseTimer);
+		}
+	}, []);
+
 	useEffect(() => {
 		runHealthCheck();
 	}, [runHealthCheck]);
 
+	useEffect(() => {
+		runHealthCheckChat();
+	}, [runHealthCheckChat]);
+
 	return (
-		<ServerHealthContext value={{ status, runHealthCheck }}>
+		<ServerHealthContext
+			value={{ status, statusChat, runHealthCheck, runHealthCheckChat }}
+		>
 			{children}
 		</ServerHealthContext>
 	);
