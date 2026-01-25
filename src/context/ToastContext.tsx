@@ -8,7 +8,8 @@ interface ToastContextType {
 		severity: string | undefined,
 		summary: string,
 		detail: string,
-		life?: number
+		life?: number,
+		stick?: boolean
 	) => void;
 	showConfirmToast: (
 		severity: string | undefined,
@@ -39,7 +40,8 @@ export function ToastProvider({ children }: ToastProviderProps) {
 		severity: string | undefined,
 		summary: string,
 		detail: string,
-		life?: number
+		life?: number,
+		stick?: boolean
 	) => {
 		toast.current?.show({
 			severity: severity as
@@ -53,6 +55,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
 			summary: summary,
 			detail: detail,
 			life: life || 3000,
+			sticky: stick || false,
 		});
 	};
 

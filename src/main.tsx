@@ -12,22 +12,25 @@ import "primeicons/primeicons.css"; //icons
 import "primeflex/primeflex.css"; //flex utilities
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { ToastProvider } from "./context/ToastContext";
+import { ServerHealthProvider } from "./context/ServerHealthContext";
 
 import "./index.css";
-import { ToastProvider } from "./context/ToastContext";
 
 createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-        <BrowserRouter>
-            <PrimeReactProvider>
-                <AuthProvider>
-                        <ToastProvider>
-                            <CartProvider>
-                                <App />
-                            </CartProvider>
-                        </ToastProvider>
-                </AuthProvider>
-            </PrimeReactProvider>
-        </BrowserRouter>
-    </StrictMode>
+	<StrictMode>
+		<BrowserRouter>
+			<PrimeReactProvider>
+				<ServerHealthProvider>
+					<AuthProvider>
+						<ToastProvider>
+							<CartProvider>
+								<App />
+							</CartProvider>
+						</ToastProvider>
+					</AuthProvider>
+				</ServerHealthProvider>
+			</PrimeReactProvider>
+		</BrowserRouter>
+	</StrictMode>,
 );
