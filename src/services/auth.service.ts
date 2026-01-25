@@ -6,6 +6,7 @@ import type {
 	IChangePassword,
 	IForgotPassword,
 	IResetPassword,
+	IAuthenticatedUser,
 } from "@/commons/types/types";
 import { api } from "@/lib/axios";
 
@@ -33,12 +34,12 @@ export const login = async (user: IUserLogin) => {
 };
 
 export const validateToken = async (
-	token: string | null
-): Promise<IResponse> => {
-	const data = await api.get(`${ROUTE}/validate`, {
+	token: string | null,
+): Promise<IAuthenticatedUser> => {
+	const { data } = await api.get(`${ROUTE}/validate`, {
 		headers: { Authorization: `Bearer ${token}` },
 	});
-	return data;
+	return data.user;
 };
 
 export const updateProfile = async (user: IUser): Promise<IResponse> => {
@@ -50,13 +51,13 @@ export const updateProfile = async (user: IUser): Promise<IResponse> => {
 };
 
 export const changePassword = async (
-	changePassword: IChangePassword
+	changePassword: IChangePassword,
 ): Promise<void> => {
 	await api.post(`${ROUTE}/change-password`, changePassword);
 };
 
 export const forgotPassword = async (
-	forgotPassword: IForgotPassword
+	forgotPassword: IForgotPassword,
 ): Promise<void> => {
 	await api.post(`${ROUTE}/forgot-password`, forgotPassword);
 };
@@ -66,7 +67,7 @@ export const validateResetToken = async (token: string): Promise<void> => {
 };
 
 export const resetPassword = async (
-	resetPassword: IResetPassword
+	resetPassword: IResetPassword,
 ): Promise<void> => {
 	await api.post(`${ROUTE}/reset-password`, resetPassword);
 };

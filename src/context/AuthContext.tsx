@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type {
 	IAuthenticatedUser,
@@ -7,115 +7,96 @@ import type {
 import { api } from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
 import { validateToken } from "@/services/auth.service";
+import { LoadingScreenAuth } from "@/components/Auth/LoadingScreenAuth";
 
 interface AuthContextType {
-	authenticated: boolean;
-	authenticatedUser?: IAuthenticatedUser;
+	isAuthenticated: boolean;
+	user?: IAuthenticatedUser;
 	handleLogin: (
-		authenticationResponse: IAuthenticationResponse
+		authenticationResponse: IAuthenticationResponse,
 	) => Promise<any>;
 	handleLogout: () => void;
-	setAuthenticatedUser: (user: IAuthenticatedUser) => void;
-}
-
-interface AuthProviderProps {
-	children: ReactNode;
+	updateUserProfile: (user: IAuthenticatedUser) => void;
 }
 
 const AuthContext = createContext({} as AuthContextType);
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-	const [authenticated, setAuthenticated] = useState(false);
-	const [authenticatedUser, setAuthenticatedUser] = useState<
-		IAuthenticatedUser | undefined
-	>();
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+	const [user, setUser] = useState<IAuthenticatedUser | undefined>();
 	const navigate = useNavigate();
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(() => {
+		const token = localStorage.getItem("token");
+		return !!token; // Se tem token, começa true (carregando validação). Se não tem, começa false.
+	});
+
+	const isAuthenticated = !!user;
 
 	useEffect(() => {
-		const validateUserSession = async () => {
+		const initSession = async () => {
+			const storedToken = localStorage.getItem("token");
+
+			if (!storedToken) {
+				setLoading(false);
+				return;
+			}
+
 			try {
-				const storedUser = localStorage.getItem("user");
-				const storedToken = localStorage.getItem("token");
+				const userResponse = await validateToken(storedToken);
 
-				if (!storedToken) {
-					setAuthenticated(false);
-					setAuthenticatedUser(undefined);
-					setLoading(false);
-					return;
-				}
+				setUser(userResponse);
 
-				const response = await validateToken(storedToken);
-
-				if (response && storedUser) {
-					const parsedUser = JSON.parse(storedUser);
-					setAuthenticatedUser(parsedUser);
-					setAuthenticated(true);
-				}
-			} catch (err) {
-				// falha de rede ou erro inesperado: deixar não autenticado, mas não navegar
-				console.error("Erro validando sessão:", err);
-				setAuthenticated(false);
-				setAuthenticatedUser(undefined);
+				localStorage.setItem("user", JSON.stringify(userResponse));
+			} catch (error) {
+				console.warn("Sessão inválida ou expirada:", error);
+				handleLogout();
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		validateUserSession();
+		initSession();
 	}, []);
+
+	const handleLogin = async ({ token, user }: IAuthenticationResponse) => {
+		localStorage.setItem("token", token);
+		localStorage.setItem("user", JSON.stringify(user));
+
+		setUser(user);
+	};
 
 	const handleLogout = () => {
 		localStorage.removeItem("token");
 		localStorage.removeItem("user");
 		localStorage.removeItem("cartItems");
-		delete api.defaults.headers.common["Authorization"];
 
-		setAuthenticated(false);
-		setAuthenticatedUser(undefined);
+		delete api.defaults.headers.common["Authorization"];
+		setUser(undefined);
 
 		navigate("/", { replace: true });
 	};
 
-	const handleLogin = async (
-		authenticationResponse: IAuthenticationResponse
-	) => {
-		try {
-			const { token, user } = authenticationResponse;
-			localStorage.setItem("token", token);
-
-			localStorage.setItem("user", JSON.stringify(user));
-
-			setAuthenticatedUser(user);
-			setAuthenticated(true);
-		} catch (err) {
-			console.log("Erro no login: ", err);
-			handleLogout();
-		}
+	const updateUserProfile = (newUser: IAuthenticatedUser) => {
+		setUser(newUser);
+		localStorage.setItem("user", JSON.stringify(newUser));
 	};
 
-	const handleSetAuthenticatedUser = (user: IAuthenticatedUser) => {
-		setAuthenticatedUser(user);
-		localStorage.setItem("user", JSON.stringify(user));
-	};
+	const contextValue = useMemo(
+		() => ({
+			isAuthenticated,
+			user,
+			loading,
+			handleLogin,
+			handleLogout,
+			updateUserProfile,
+		}),
+		[user, loading, isAuthenticated],
+	);
 
 	if (loading) {
-		return <div>Validando sessão ...</div>;
+		return <LoadingScreenAuth />;
 	}
 
-	return (
-		<AuthContext.Provider
-			value={{
-				authenticated,
-				authenticatedUser,
-				handleLogin,
-				handleLogout,
-				setAuthenticatedUser: handleSetAuthenticatedUser,
-			}}
-		>
-			{children}
-		</AuthContext.Provider>
-	);
+	return <AuthContext value={contextValue}>{children}</AuthContext>;
 };
 
 export { AuthContext };

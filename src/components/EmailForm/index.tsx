@@ -19,7 +19,7 @@ interface EmailFormProps {
 
 export const EmailForm = ({ hide, product }: EmailFormProps) => {
 	const { showToast } = useToast();
-	const { authenticatedUser } = useAuth();
+	const { user } = useAuth();
 
 	const {
 		control,
@@ -32,10 +32,10 @@ export const EmailForm = ({ hide, product }: EmailFormProps) => {
 	});
 
 	useEffect(() => {
-		if (authenticatedUser) {
-			reset({ email: authenticatedUser.email });
+		if (user) {
+			reset({ email: user.email });
 		}
-	}, [authenticatedUser]);
+	}, [user]);
 
 	const onSubmit = async (data: { email: string }) => {
 		try {
@@ -99,7 +99,7 @@ export const EmailForm = ({ hide, product }: EmailFormProps) => {
 				rules={VALIDATION_RULES.email}
 				autoComplete="email"
 				type="email"
-				value={authenticatedUser?.email}
+				value={user?.email}
 			/>
 
 			<div className="email-form-actions">

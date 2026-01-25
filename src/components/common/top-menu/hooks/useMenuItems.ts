@@ -16,7 +16,7 @@ interface UserMenuItem {
 
 export const useMenuItems = () => {
     const navigate = useNavigate();
-    const { authenticated, handleLogout } = useAuth();
+    const { isAuthenticated, handleLogout } = useAuth();
 
     const menuItems: MenuItem[] = [
         { label: "Home", path: "/", hash: "home", icon: "pi pi-home" },
@@ -40,7 +40,7 @@ export const useMenuItems = () => {
         },
     ];
 
-    const userMenuItems: UserMenuItem[] = authenticated
+    const userMenuItems: UserMenuItem[] = isAuthenticated
         ? [
               {
                   label: "Meu Perfil",

@@ -52,7 +52,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
     const navigate = useNavigate();
     const location = useLocation();
     const { cartMetrics } = useCart();
-    const { authenticated, authenticatedUser } = useAuth();
+    const { isAuthenticated, user } = useAuth();
 
     const cartItemsCount = cartMetrics?.totalItems ? cartMetrics.totalItems : 0;
 
@@ -104,8 +104,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 
                 {/* User Section */}
                 <MobileUserSection
-                    authenticated={authenticated}
-                    authenticatedUser={authenticatedUser}
+                    isAuthenticated={isAuthenticated}
+                    user={user}
                     userMenuItems={userMenuItems}
                     onActionClick={onClose}
                 />

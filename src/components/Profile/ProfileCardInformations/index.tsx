@@ -18,7 +18,7 @@ const FORM_DEFAULT_VALUES = {
 };
 
 export const ProfileCardInformations = () => {
-	const { authenticatedUser, setAuthenticatedUser } = useAuth();
+	const { user, updateUserProfile } = useAuth();
 	const { showToast } = useToast();
 	const [isEditing, setIsEditing] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
@@ -35,26 +35,26 @@ export const ProfileCardInformations = () => {
 	});
 
 	useEffect(() => {
-		if (authenticatedUser) {
+		if (user) {
 			reset({
-				displayName: authenticatedUser.displayName,
-				email: authenticatedUser.email,
+				displayName: user.displayName,
+				email: user.email,
 			});
 		}
-	}, [authenticatedUser, reset]);
+	}, [user, reset]);
 
 	const watchedDisplayName = watch("displayName");
 	const watchedEmail = watch("email");
 
 	const isEquals =
-		authenticatedUser?.displayName === watchedDisplayName &&
-		authenticatedUser?.email === watchedEmail;
+		user?.displayName === watchedDisplayName &&
+		user?.email === watchedEmail;
 
 	const handleEditClick = () => {
-		if (authenticatedUser) {
+		if (user) {
 			reset({
-				displayName: authenticatedUser.displayName,
-				email: authenticatedUser.email,
+				displayName: user.displayName,
+				email: user.email,
 			});
 		}
 		setIsEditing(true);
@@ -62,18 +62,18 @@ export const ProfileCardInformations = () => {
 
 	const handleCancel = () => {
 		setIsEditing(false);
-		if (authenticatedUser) {
+		if (user) {
 			reset({
-				displayName: authenticatedUser.displayName,
-				email: authenticatedUser.email,
+				displayName: user.displayName,
+				email: user.email,
 			});
 		}
 	};
 
 	const handleSave = async (data: IUserUpdate) => {
 		if (
-			data.displayName == authenticatedUser?.displayName &&
-			data.email == authenticatedUser?.email
+			data.displayName == user?.displayName &&
+			data.email == user?.email
 		) {
 			setIsEditing(false);
 			return;
@@ -81,11 +81,11 @@ export const ProfileCardInformations = () => {
 
 		try {
 			setIsSaving(true);
-			data.id = authenticatedUser?.id;
+			data.id = user?.id;
 			await updateProfile(data);
 
-			setAuthenticatedUser({
-				...authenticatedUser!,
+			updateUserProfile({
+				...user!,
 				displayName: data.displayName || "",
 				email: data.email || "",
 			});
@@ -155,7 +155,7 @@ export const ProfileCardInformations = () => {
 						) : (
 							<div className="field-display">
 								<span className="field-value">
-									{authenticatedUser?.displayName}
+									{user?.displayName}
 								</span>
 							</div>
 						)}
@@ -194,7 +194,7 @@ export const ProfileCardInformations = () => {
 						) : (
 							<div className="field-display">
 								<span className="field-value">
-									{authenticatedUser?.email}
+									{user?.email}
 								</span>
 							</div>
 						)}
@@ -207,7 +207,7 @@ export const ProfileCardInformations = () => {
 						</label>
 							<div className="field-display">
 								<span className="field-value">
-									{authenticatedUser?.cpf}
+									{user?.cpf}
 								</span>
 							</div>
 					</div> */}
