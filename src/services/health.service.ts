@@ -1,7 +1,6 @@
 import { api, apiChat } from "@/lib/axios";
 
 const ROUTE = "/api/health";
-const ROUTE_CHAT = "/";
 
 export const healthCheckApi = async (): Promise<any> => {
 	const { data } = await api.get(ROUTE);
@@ -9,6 +8,6 @@ export const healthCheckApi = async (): Promise<any> => {
 };
 
 export const healthCheckApiChat = async (): Promise<any> => {
-	const { data } = await apiChat.get(ROUTE_CHAT);
+	const { data } = await apiChat.get(ROUTE);
 	return data;
 };
