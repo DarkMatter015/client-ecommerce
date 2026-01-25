@@ -7,26 +7,26 @@ interface UserMenuItem {
 }
 
 interface MobileUserSectionProps {
-    authenticated: boolean;
-    authenticatedUser: any;
+    isAuthenticated: boolean;
+    user: any;
     userMenuItems: UserMenuItem[];
     onActionClick: () => void;
 }
 
 export const MobileUserSection: React.FC<MobileUserSectionProps> = ({
-    authenticated,
-    authenticatedUser,
+    isAuthenticated,
+    user,
     userMenuItems,
     onActionClick,
 }) => {
     return (
         <div className="mobile-menu-section">
             <h3 className="mobile-section-title">Conta</h3>
-            {authenticated ? (
+            {isAuthenticated ? (
                 <>
                     <div className="mobile-user-info">
                         <i className="pi pi-user"></i>
-                        <span>{authenticatedUser?.displayName}</span>
+                        <span>{user?.displayName}</span>
                     </div>
                     <nav className="mobile-nav">
                         {userMenuItems.map((item, index) => (

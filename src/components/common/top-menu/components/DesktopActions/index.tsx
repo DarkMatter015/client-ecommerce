@@ -21,7 +21,7 @@ export const DesktopActions: React.FC<DesktopActionsProps> = ({
     const navigate = useNavigate();
     const menuRef = useRef<Menu>(null);
     const { cartMetrics } = useCart();
-    const { authenticated, authenticatedUser } = useAuth();
+    const { isAuthenticated, user } = useAuth();
 
     const cartItemsCount = cartMetrics?.totalItems ? cartMetrics.totalItems : 0;
 
@@ -42,16 +42,16 @@ export const DesktopActions: React.FC<DesktopActionsProps> = ({
 
             {/* User Menu */}
             <div className="navbar-user-section">
-                {authenticated ? (
+                {isAuthenticated ? (
                     <button
                         className="navbar-user-btn authenticated"
                         onClick={(e) => menuRef.current?.toggle(e)}
                         aria-label="Menu do usuário"
-                        title={authenticatedUser?.displayName}
+                        title={user?.displayName}
                     >
                         <i className="pi pi-user"></i>
                         <span className="user-name">
-                            {authenticatedUser?.displayName}
+                            {user?.displayName}
                         </span>
                     </button>
                 ) : (
