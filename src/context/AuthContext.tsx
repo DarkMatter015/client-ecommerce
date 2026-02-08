@@ -8,6 +8,7 @@ import { api } from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
 import { validateToken } from "@/services/auth.service";
 import { LoadingScreenAuth } from "@/components/Auth/LoadingScreenAuth";
+import { useAiChat } from "@/hooks/useAiChat";
 
 interface AuthContextType {
 	isAuthenticated: boolean;
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		const token = localStorage.getItem("token");
 		return !!token; // Se tem token, começa true (carregando validação). Se não tem, começa false.
 	});
+	const { clearChatHistory } = useAiChat();
 
 	const isAuthenticated = !!user;
 
@@ -68,6 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		localStorage.removeItem("token");
 		localStorage.removeItem("user");
 		localStorage.removeItem("cartItems");
+		clearChatHistory();
 
 		delete api.defaults.headers.common["Authorization"];
 		setUser(undefined);

@@ -1,5 +1,6 @@
 export interface IChatRequest {
     message: string;
+    sessionId: string;
 }
 
 export interface IChatResponse {
@@ -8,6 +9,12 @@ export interface IChatResponse {
 
 export interface IMessage {
 	id: number;
-	type: string;
+	date: string;
+	type: MessageType;
 	message: string;
+}
+
+export enum MessageType {
+    USER = "user",
+    BOT = "bot"
 }

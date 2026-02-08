@@ -13,6 +13,9 @@
 
 .p-sidebar-content {
 	padding: 0 !important;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 .p-sidebar-header {
 	padding: 0.5rem 1rem;
@@ -54,6 +57,7 @@
 /* Cabeçalho */
 .riff-header {
 	padding: 0 1rem;
+	margin-bottom: 1rem;
 }
 
 .riff-header-title {
@@ -85,7 +89,7 @@
 
 .riff-body {
 	flex: 1;
-	padding: 1rem;
+	padding: 0 1rem;
 	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
@@ -93,6 +97,31 @@
 }
 
 /* Balões */
+
+.riff-message-container {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	gap: 0.3rem;
+}
+
+.riff-message-container:has(.riff-message.user) {
+	flex-direction: row-reverse;
+}
+
+.riff-message-avatar {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+.riff-message-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
 .riff-message {
 	max-width: 80%;
 	padding: 10px 14px;
@@ -100,6 +129,19 @@
 	font-size: 0.95rem;
 	line-height: 1.4;
 	position: relative;
+}
+
+.riff-message-date {
+	font-size: 0.6rem;
+	text-align: right;
+}
+
+.riff-message-date.user {
+	color: var(--riff-black);
+}
+
+.riff-message-date.bot {
+	color: var(--riff-white);
 }
 
 .riff-message.bot {
@@ -164,7 +206,7 @@
 	color: var(--riff-white);
 	border: none;
 	border-radius: 50%;
-  padding: 0.8rem;
+	padding: 0.8rem;
 	cursor: pointer;
 	transition: background 0.2s;
 	display: flex;
