@@ -17,3 +17,11 @@ export const scrollIntoView = (id: string): void => {
 export const getFormattedDate = (locale: string = "pt-BR") => {
 	return new Date().toLocaleString(locale);
 };
+
+export const isDateExpired = (date: number | string): boolean => {
+	const today = new Date();
+	const messageDate = new Date(date);
+	// 24 hours in milliseconds
+	const oneDay = 24 * 60 * 60 * 1000;
+	return messageDate.getTime() < today.getTime() - oneDay;
+};

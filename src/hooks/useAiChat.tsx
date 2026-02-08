@@ -3,32 +3,54 @@ import {
 	type IChatRequest,
 	type IMessage,
 } from "@/commons/types/Chat";
+import { useAuth } from "@/context/hooks/use-auth";
 import { postChatAi } from "@/services/chatAi.service";
-import { getFormattedDate } from "@/utils/Utils";
-import { useEffect, useState } from "react";
+import { getFormattedDate, isDateExpired } from "@/utils/Utils";
+import { useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const CHAT_HISTORY_KEY = "riff_chat_history";
-const GUEST_ID_KEY = "riff_guest_id";
+export const CHAT_HISTORY_KEY = "riff_chat_history";
+export const GUEST_ID_KEY = "riff_guest_id";
+const CHAT_USER_INFO_KEY = "riff_chat_user_info";
 
 export function useAiChat() {
-	const username = localStorage.getItem("username") || "Visitante";
-	const INITIAL_MESSAGES = [
-		{
-			id: Date.now(),
-			date: getFormattedDate(),
-			type: MessageType.BOT,
-			message: `Olá ${username}! Eu sou o Riff 🎸. Estou aqui para ajudar você a encontrar o som perfeito.`,
+	const { user } = useAuth();
+	// 1. Memoize helper to generate initial messages based on current user
+	const getInitialMessages = useCallback(
+		(currentUser = user): IMessage[] => {
+			console.log("Generating initial messages for:", currentUser);
+			return [
+				{
+					id: Date.now(),
+					date: getFormattedDate(),
+					type: MessageType.BOT,
+					message: `Olá ${
+						currentUser?.displayName || "Visitante"
+					}! Eu sou o Riff 🎸. Estou aqui para ajudar você a encontrar o som perfeito. O que procura hoje?`,
+				},
+			];
 		},
-	];
+		[user],
+	);
+
 	const [isChatResponding, setIsChatResponding] = useState<boolean>(false);
 	const [messages, setMessages] = useState<IMessage[]>(() => {
 		try {
 			const saved = localStorage.getItem(CHAT_HISTORY_KEY);
-			return saved ? JSON.parse(saved) : INITIAL_MESSAGES;
+			if (saved) {
+				const parsedMessages = JSON.parse(saved);
+				if (parsedMessages.length > 0) {
+					const lastMessage =
+						parsedMessages[parsedMessages.length - 1];
+					if (!isDateExpired(lastMessage.id)) {
+						return parsedMessages;
+					}
+				}
+			}
+			return getInitialMessages();
 		} catch (e) {
 			console.error("Erro ao ler LocalStorage", e);
-			return [];
+			return getInitialMessages();
 		}
 	});
 
@@ -48,12 +70,54 @@ export function useAiChat() {
 		localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(messages));
 	}, [messages]);
 
-	// Função para limpar o histórico (caso o usuário queira reiniciar ou faça logout)
-	const clearChatHistory = () => {
-		localStorage.removeItem(CHAT_HISTORY_KEY);
-		localStorage.removeItem(GUEST_ID_KEY);
-		setMessages(INITIAL_MESSAGES);
-	};
+	useEffect(() => {
+		user
+			? localStorage.setItem(CHAT_USER_INFO_KEY, String(user.id))
+			: localStorage.removeItem(CHAT_USER_INFO_KEY);
+	}, [user]);
+
+	// 3. Memoize clearChatHistory to avoid unnecessary re-renders in dependants
+	const clearChatHistory = useCallback(
+		(targetUser = user) => {
+			localStorage.removeItem(CHAT_HISTORY_KEY);
+			localStorage.removeItem(GUEST_ID_KEY);
+			localStorage.removeItem(CHAT_USER_INFO_KEY);
+			setMessages(getInitialMessages(targetUser));
+		},
+		[getInitialMessages, user],
+	);
+
+	// 4. Check for expiration periodically (every minute)
+	useEffect(() => {
+		const checkExpiration = () => {
+			if (messages.length > 0) {
+				const lastMessage = messages[messages.length - 1];
+				if (isDateExpired(lastMessage.id)) {
+					clearChatHistory();
+				}
+			}
+		};
+
+		const intervalId = setInterval(checkExpiration, 60000); // 1 minute
+
+		return () => clearInterval(intervalId);
+	}, [messages, clearChatHistory]);
+
+	// 5. Watch for user changes (login/logout) to clear previous session history
+	const [storedUserId, setStoredUserId] = useState<number | undefined>(() => {
+		const stored = localStorage.getItem(CHAT_USER_INFO_KEY);
+		return stored ? Number(stored) : undefined;
+	});
+
+	useEffect(() => {
+		const hasUserChanged = storedUserId !== user?.id;
+
+		if (hasUserChanged) {
+			console.log(`User changed from ${storedUserId} to ${user?.id}`);
+			clearChatHistory(user);
+			setStoredUserId(user?.id || undefined);
+		}
+	}, [user, storedUserId, clearChatHistory]);
 
 	const handleSendMessage = async (e: IChatRequest) => {
 		console.log(e);
@@ -87,7 +151,7 @@ export function useAiChat() {
 				date: getFormattedDate(),
 				type: MessageType.BOT,
 				message:
-					"Erro ao enviar mensagem =(. Tente novamente mais tarde.",
+					"Desculpe, minha corda arrebentou (erro de conexão) =(. Tente novamente mais tarde.",
 			};
 			setMessages((prev) => [...prev, botMsg]);
 		} finally {
