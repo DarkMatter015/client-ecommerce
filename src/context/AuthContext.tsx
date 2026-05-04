@@ -8,6 +8,7 @@ import { api } from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
 import { validateToken } from "@/services/auth.service";
 import { LoadingScreenAuth } from "@/components/Auth/LoadingScreenAuth";
+import { CHAT_HISTORY_KEY, GUEST_ID_KEY } from "@/hooks/useAiChat";
 
 interface AuthContextType {
 	isAuthenticated: boolean;
@@ -68,6 +69,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		localStorage.removeItem("token");
 		localStorage.removeItem("user");
 		localStorage.removeItem("cartItems");
+		localStorage.removeItem(CHAT_HISTORY_KEY);
+		localStorage.removeItem(GUEST_ID_KEY);
 
 		delete api.defaults.headers.common["Authorization"];
 		setUser(undefined);

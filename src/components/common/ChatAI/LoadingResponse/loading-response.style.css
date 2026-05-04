@@ -1,0 +1,37 @@
+.riff-loading {
+    display: flex;
+    gap: 0.35rem;
+    padding: 0.5rem;
+}
+
+.riff-loading .riff-loading-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--gray-400);
+    animation: riff-loading-dot 1s infinite;
+}
+
+.riff-loading .riff-loading-dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.riff-loading .riff-loading-dot:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.riff-loading .riff-loading-dot:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes riff-loading-dot {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

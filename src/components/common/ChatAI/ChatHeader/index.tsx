@@ -1,5 +1,7 @@
+import { useAuth } from "@/context/hooks/use-auth";
+
 export const ChatHeader = () => {
-	const username = localStorage.getItem("username");
+	const { user } = useAuth();
 	return (
 		<div className="riff-header">
 			<div className="riff-header-title">
@@ -10,7 +12,7 @@ export const ChatHeader = () => {
 					height="100"
 				></img>
 				<span className="title-name">
-					Olá {username ? username : "Visitante"}
+					Olá {user?.displayName || "Visitante"}
 				</span>
 				<span className="title-description">
 					Estou aqui para ajudar você a encontrar o som perfeito. O
