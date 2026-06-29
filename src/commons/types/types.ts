@@ -94,6 +94,12 @@ export interface IAddress {
   active?: boolean;
 }
 
+export interface IProductImage {
+  id: number;
+  url: string;
+  position: number;
+}
+
 export interface IProduct {
   id: number;
   name: string;
@@ -102,6 +108,7 @@ export interface IProduct {
   urlImage: string;
   quantityAvailableInStock: number;
   category: ICategory;
+  images?: IProductImage[];
 }
 
 export interface IItem {

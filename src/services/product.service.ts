@@ -1,12 +1,21 @@
 import { normalizePage } from "@/utils/ServiceUtils";
-import type { IPage, IProduct } from "../commons/types/types";
+import type { IPage, IProduct, IProductImage } from "../commons/types/types";
 import { api } from "../lib/axios";
 
 const ROUTE = "/products";
 
 type ApiProduct = Record<string, any>;
 
+const mapApiToProductImage = (item: ApiProduct): IProductImage => ({
+	id: item.id,
+	url: item.url,
+	position: Number(item.position ?? 0),
+});
+
 const mapApiToProduct = (item: ApiProduct): IProduct => {
+	const images: IProductImage[] = Array.isArray(item.images)
+		? item.images.map(mapApiToProductImage)
+		: [];
 	return {
 		id: item.id,
 		name: item.name,
@@ -17,6 +26,7 @@ const mapApiToProduct = (item: ApiProduct): IProduct => {
 			"/assets/images/common/unavailable_image_product.png",
 		category: item.category,
 		quantityAvailableInStock: Number(item.quantityAvailableInStock),
+		images,
 	};
 };
 

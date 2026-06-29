@@ -18,10 +18,13 @@ export const ContainerProductImage: React.FC<{
     // thumbnails: ensure we always pass an array of image urls
     const thumbnails = useMemo(() => {
         const arr: string[] = [];
-        if (produto.urlImage) arr.push(produto.urlImage);
-        // if future data has an array field like 'miniaturas', include them
-        const mini = (produto as any).miniaturas;
-        if (Array.isArray(mini)) arr.push(...mini);
+        // prefer the gallery uploaded to MinIO (ordered by position)
+        const gallery = produto.images;
+        if (Array.isArray(gallery) && gallery.length > 0) {
+            arr.push(...gallery.map((image) => image.url));
+        } else if (produto.urlImage) {
+            arr.push(produto.urlImage);
+        }
         return arr;
     }, [produto]);
 
