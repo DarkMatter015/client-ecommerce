@@ -7,12 +7,20 @@ import type {
 import { formatCurrency } from "@/utils/Utils";
 import { ItemCartCheckout } from "../ItemCartCheckout";
 import type React from "react";
+import { useRef } from "react";
+import { Button } from "primereact/button";
+import {
+	FileUpload,
+	type FileUploadSelectEvent,
+} from "primereact/fileupload";
 
 interface OrderConfirmationProps {
 	cartItems: IItem[];
 	selectedAddress: IAddress | null;
 	paymentMethod: IPayment | null;
 	freight: IFreightResponse | null;
+	comprovanteFile: File | null;
+	onSelectComprovante: (file: File | null) => void;
 }
 
 export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
@@ -20,7 +28,11 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
 	selectedAddress,
 	paymentMethod,
 	freight,
+	comprovanteFile,
+	onSelectComprovante,
 }) => {
+	const fileUploadRef = useRef<FileUpload>(null);
+
 	return (
 		<div className="flex flex-column gap-0 lg:gap-3">
 			<section
@@ -151,6 +163,67 @@ export const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
 					</section>
 				</div>
 			</div>
+
+			<section
+				className="checkout-card"
+				aria-labelledby="confirmation-proof-heading"
+			>
+				<h3
+					id="confirmation-proof-heading"
+					className="flex align-items-center gap-2"
+				>
+					<i className="pi pi-paperclip text-primary" />
+					Comprovante de Pagamento
+				</h3>
+				<p className="text-600 text-sm mt-0 mb-3">
+					Anexe o comprovante de pagamento (PDF, JPG ou PNG até
+					10MB) para finalizar o pedido. Você poderá adicionar
+					outros documentos depois, na página de pedidos.
+				</p>
+				<div className="flex align-items-center gap-3 flex-wrap">
+					<FileUpload
+						ref={fileUploadRef}
+						mode="basic"
+						auto={false}
+						customUpload
+						uploadHandler={() => {}}
+						chooseLabel={
+							comprovanteFile
+								? "Trocar arquivo"
+								: "Selecionar comprovante"
+						}
+						chooseOptions={{ icon: "pi pi-paperclip" }}
+						accept=".pdf,image/png,image/jpeg"
+						maxFileSize={10 * 1024 * 1024}
+						onSelect={(e: FileUploadSelectEvent) =>
+							onSelectComprovante(e.files?.[0] ?? null)
+						}
+					/>
+					{comprovanteFile ? (
+						<div className="flex align-items-center gap-2 p-2 border-1 surface-border border-round surface-50">
+							<i className="pi pi-file text-primary" />
+							<span className="font-medium text-900">
+								{comprovanteFile.name}
+							</span>
+							<Button
+								icon="pi pi-times"
+								rounded
+								text
+								severity="danger"
+								aria-label="Remover comprovante"
+								onClick={() => {
+									fileUploadRef.current?.clear();
+									onSelectComprovante(null);
+								}}
+							/>
+						</div>
+					) : (
+						<span className="text-red-500 text-sm">
+							Nenhum comprovante anexado
+						</span>
+					)}
+				</div>
+			</section>
 		</div>
 	);
 };

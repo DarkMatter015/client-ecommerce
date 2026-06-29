@@ -17,6 +17,7 @@ import { CalcFreight } from "@/components/Freight/CalcFreight";
 import { getPayments } from "@/services/payment.service";
 import { createAddress, getAddresses } from "@/services/address.service";
 import { createOrder } from "@/services/order.service";
+import { uploadOrderDocument } from "@/services/order_document.service";
 
 const CheckoutPage: React.FC = () => {
 	const { cartItems, freight, cleanCart } = useCart();
@@ -44,6 +45,7 @@ const CheckoutPage: React.FC = () => {
 	const navigate = useNavigate();
 	const { showToast } = useToast();
 	const [paymentSuccess, setPaymentSuccess] = useState(false);
+	const [comprovanteFile, setComprovanteFile] = useState<File | null>(null);
 
 	useEffect(() => {
 		if (paymentSuccess) return;
@@ -104,12 +106,30 @@ const CheckoutPage: React.FC = () => {
 				paymentMethod,
 			});
 
-			showToast(
-				"success",
-				`Pedido ${response.id} Realizado com sucesso!`,
-				"Você será redirecionado para a página de pedidos ...",
-				3000
-			);
+			try {
+				await uploadOrderDocument(
+					response.id,
+					comprovanteFile!,
+					"COMPROVANTE"
+				);
+				showToast(
+					"success",
+					`Pedido ${response.id} Realizado com sucesso!`,
+					"Comprovante anexado. Você será redirecionado para a página de pedidos ...",
+					3000
+				);
+			} catch (uploadError) {
+				console.error(
+					"Erro ao anexar comprovante:",
+					uploadError
+				);
+				showToast(
+					"warn",
+					`Pedido ${response.id} realizado!`,
+					"Não foi possível anexar o comprovante agora. Você poderá anexá-lo na página de pedidos.",
+					5000
+				);
+			}
 
 			setPaymentSuccess(true);
 			cleanCart();
@@ -153,6 +173,15 @@ const CheckoutPage: React.FC = () => {
 				"warn",
 				"Frete Necessário",
 				"Por favor, selecione um frete."
+			);
+			return;
+		}
+
+		if (!comprovanteFile) {
+			showToast(
+				"warn",
+				"Comprovante Necessário",
+				"Por favor, anexe o comprovante de pagamento para finalizar o pedido."
 			);
 			return;
 		}
@@ -316,6 +345,8 @@ const CheckoutPage: React.FC = () => {
 							selectedAddress={selectedAddress}
 							paymentMethod={paymentMethod}
 							freight={freight}
+							comprovanteFile={comprovanteFile}
+							onSelectComprovante={setComprovanteFile}
 						/>
 						<div className="mt-4 w-full">
 							<Summary
@@ -328,7 +359,9 @@ const CheckoutPage: React.FC = () => {
 								}
 								selectedAddress={selectedAddress}
 								freightDisable={true}
-								disabledNext={paymentSuccess}
+								disabledNext={
+									paymentSuccess || !comprovanteFile
+								}
 								actionButtonsDisabled={false}
 							/>
 						</div>

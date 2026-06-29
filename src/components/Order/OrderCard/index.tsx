@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import { Panel } from "primereact/panel";
 import type React from "react";
 import { OrderItemList } from "../OrderItemList";
+import { OrderDocuments } from "../OrderDocuments";
 
 import "./order-card.style.css";
 
@@ -201,6 +202,13 @@ export const OrderCard: React.FC<{
 							</div>
 						</Panel>
 					)}
+
+					<Panel
+						header="Documentos e Comprovantes"
+						className="order-documents-panel mt-3"
+					>
+						<OrderDocuments orderId={order.id!} />
+					</Panel>
 				</div>
 			)}
 		</div>
